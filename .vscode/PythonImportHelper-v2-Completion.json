@@ -1,0 +1,38 @@
+[
+    {
+        "label": "pandas",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "pandas",
+        "description": "pandas",
+        "detail": "pandas",
+        "documentation": {}
+    },
+    {
+        "label": "files",
+        "kind": 5,
+        "importPath": "project",
+        "description": "project",
+        "peekOfCode": "files = {\n    \"2015\": \"/mnt/data/2015_CostReport.csv\",\n    \"2016\": \"/mnt/data/2016_CostReport.csv\",\n    \"2017\": \"/mnt/data/2017_CostReport.csv\",\n    \"2018\": \"/mnt/data/2018_CostReport.csv\",\n    \"2019\": \"/mnt/data/2019_CostReport.csv\"\n}\n# Create an empty list to hold each year's DataFrame\nall_dataframes = []\n# Loop through files, read, and append the year",
+        "detail": "project",
+        "documentation": {}
+    },
+    {
+        "label": "all_dataframes",
+        "kind": 5,
+        "importPath": "project",
+        "description": "project",
+        "peekOfCode": "all_dataframes = []\n# Loop through files, read, and append the year\nfor year, path in files.items():\n    df = pd.read_csv(path, low_memory=False)\n    df['Year'] = int(year)\n    all_dataframes.append(df)\n# Concatenate all DataFrames into one\nmerged_df = pd.concat(all_dataframes, ignore_index=True)\n# Show the shape or a preview\nprint(\"Merged DataFrame shape:\", merged_df.shape)",
+        "detail": "project",
+        "documentation": {}
+    },
+    {
+        "label": "merged_df",
+        "kind": 5,
+        "importPath": "project",
+        "description": "project",
+        "peekOfCode": "merged_df = pd.concat(all_dataframes, ignore_index=True)\n# Show the shape or a preview\nprint(\"Merged DataFrame shape:\", merged_df.shape)\nprint(merged_df.head())",
+        "detail": "project",
+        "documentation": {}
+    }
+]
