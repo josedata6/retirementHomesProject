@@ -236,80 +236,80 @@ import numpy as np
 ######################################################
 ##### Map with nursing homes by year and legend #####
 
-# import pandas as pd
-# import glob
-# import folium
-# from folium.plugins import MarkerCluster
+import pandas as pd
+import glob
+import folium
+from folium.plugins import MarkerCluster
 
-# # Step 1: Load all QualityMsrMDS files
-# files = glob.glob("QualityMsrMDS_20*_Cleaned.csv")
+# Step 1: Load all QualityMsrMDS files
+files = glob.glob("QualityMsrMDS_20*_Cleaned.csv")
 
-# def load_address_info(filepath):
-#     df = pd.read_csv(filepath, encoding='ISO-8859-1', low_memory=False)
-#     df.columns = df.columns.str.strip().str.lower()
-#     year = os.path.basename(filepath).split("_")[1]
-#     df['year'] = int(year)
-#     required_cols = ['address', 'city', 'state', 'zip', 'year']
-#     if all(col in df.columns for col in ['address', 'city', 'state', 'zip']):
-#         return df[required_cols]
-#     else:
-#         print(f"⚠️ Skipping file {filepath}: required address columns not found.")
-#         return pd.DataFrame()
+def load_address_info(filepath):
+    df = pd.read_csv(filepath, encoding='ISO-8859-1', low_memory=False)
+    df.columns = df.columns.str.strip().str.lower()
+    year = os.path.basename(filepath).split("_")[1]
+    df['year'] = int(year)
+    required_cols = ['address', 'city', 'state', 'zip', 'year']
+    if all(col in df.columns for col in ['address', 'city', 'state', 'zip']):
+        return df[required_cols]
+    else:
+        print(f"⚠️ Skipping file {filepath}: required address columns not found.")
+        return pd.DataFrame()
 
-# # Combine and deduplicate
-# address_df = pd.concat([load_address_info(f) for f in files], ignore_index=True)
-# address_df.drop_duplicates(subset=['address', 'city', 'state', 'zip'], inplace=True)
+# Combine and deduplicate
+address_df = pd.concat([load_address_info(f) for f in files], ignore_index=True)
+address_df.drop_duplicates(subset=['address', 'city', 'state', 'zip'], inplace=True)
 
-# # Load ZIP code coordinates
-# zip_latlng_df = pd.read_csv('uszips.csv')
-# zip_latlng_df['zip'] = zip_latlng_df['zip'].astype(str).str.zfill(5)
-# address_df['zip'] = address_df['zip'].astype(str).str.zfill(5)
+# Load ZIP code coordinates
+zip_latlng_df = pd.read_csv('uszips.csv')
+zip_latlng_df['zip'] = zip_latlng_df['zip'].astype(str).str.zfill(5)
+address_df['zip'] = address_df['zip'].astype(str).str.zfill(5)
 
-# # Merge
-# merged_df = pd.merge(
-#     address_df,
-#     zip_latlng_df[['zip', 'lat', 'lng']],
-#     how='inner',
-#     on='zip'
-# )
+# Merge
+merged_df = pd.merge(
+    address_df,
+    zip_latlng_df[['zip', 'lat', 'lng']],
+    how='inner',
+    on='zip'
+)
 
-# print(f"✅ Total records after merging with ZIP coordinates: {len(merged_df)}")
+print(f"✅ Total records after merging with ZIP coordinates: {len(merged_df)}")
 
-# # Color palette for each year
-# year_colors = {
-#     2015: 'blue',
-#     2016: 'green',
-#     2017: 'purple',
-#     2018: 'orange',
-#     2019: 'red',
-#     2020: 'pink',
-#     2021: 'cadetblue'
-# }
+# Color palette for each year
+year_colors = {
+    2015: 'blue',
+    2016: 'green',
+    2017: 'purple',
+    2018: 'orange',
+    2019: 'red',
+    2020: 'pink',
+    2021: 'cadetblue'
+}
 
-# # Create base map
-# m = folium.Map(location=[merged_df['lat'].mean(), merged_df['lng'].mean()], zoom_start=5)
+# Create base map
+m = folium.Map(location=[merged_df['lat'].mean(), merged_df['lng'].mean()], zoom_start=5)
 
-# # Create a FeatureGroup for each year
-# for year, color in year_colors.items():
-#     year_data = merged_df[merged_df['year'] == year]
-#     fg = folium.FeatureGroup(name=f"{year}", show=True)
-#     cluster = MarkerCluster().add_to(fg)
+# Create a FeatureGroup for each year
+for year, color in year_colors.items():
+    year_data = merged_df[merged_df['year'] == year]
+    fg = folium.FeatureGroup(name=f"{year}", show=True)
+    cluster = MarkerCluster().add_to(fg)
 
-#     for _, row in year_data.iterrows():
-#         folium.Marker(
-#             location=[row['lat'], row['lng']],
-#             popup=f"{row['address']}, {row['city']}, {row['state']} {row['zip']} ({row['year']})",
-#             icon=folium.Icon(color=color, icon='home')
-#         ).add_to(cluster)
+    for _, row in year_data.iterrows():
+        folium.Marker(
+            location=[row['lat'], row['lng']],
+            popup=f"{row['address']}, {row['city']}, {row['state']} {row['zip']} ({row['year']})",
+            icon=folium.Icon(color=color, icon='home')
+        ).add_to(cluster)
 
-#     fg.add_to(m)
+    fg.add_to(m)
 
-# # Add layer control
-# folium.LayerControl(collapsed=False).add_to(m)
+# Add layer control
+folium.LayerControl(collapsed=False).add_to(m)
 
-# # Save the map
-# m.save("nursing_homes_toggle_by_year.html")
-# print("✅ Interactive toggle map saved as 'nursing_homes_toggle_by_year.html'")
+# Save the map
+m.save("nursing_homes_toggle_by_year.html")
+print("✅ Interactive toggle map saved as 'nursing_homes_toggle_by_year.html'")
 
 ###################################
 ######### Regression Analysis ######
@@ -480,126 +480,200 @@ import numpy as np
 # Regression Analysis with all years combined
 # This code assumes you have already cleaned the CostReport and ProviderInfo files
 
-import pandas as pd
-import statsmodels.api as sm
-import glob
-import os
+# import pandas as pd
+# import statsmodels.api as sm
+# import glob
+# import os
 
-# Step 1: Load all cleaned CostReport CSVs (2015–2021)
-cost_files = {
-    "2015": "2015_CostReport_cleaned.csv",
-    "2016": "2016_CostReport_cleaned.csv",
-    "2017": "2017_CostReport_cleaned.csv",
-    "2018": "2018_CostReport_cleaned.csv",
-    "2019": "2019_CostReport_cleaned.csv",
-    "2020": "2020_CostReport_cleaned.csv",
-    "2021": "2021_CostReport_cleaned.csv"
-}
+# # Step 1: Load all cleaned CostReport CSVs (2015–2021)
+# cost_files = {
+#     "2015": "2015_CostReport_cleaned.csv",
+#     "2016": "2016_CostReport_cleaned.csv",
+#     "2017": "2017_CostReport_cleaned.csv",
+#     "2018": "2018_CostReport_cleaned.csv",
+#     "2019": "2019_CostReport_cleaned.csv",
+#     "2020": "2020_CostReport_cleaned.csv",
+#     "2021": "2021_CostReport_cleaned.csv"
+# }
 
-cost_dfs = []
-for year, path in cost_files.items():
-    df = pd.read_csv(path, low_memory=False)
-    df['year'] = int(year)
-    df['provider_ccn'] = df['provider_ccn'].astype(str).str.zfill(6)
-    cost_dfs.append(df)
+# cost_dfs = []
+# for year, path in cost_files.items():
+#     df = pd.read_csv(path, low_memory=False)
+#     df['year'] = int(year)
+#     df['provider_ccn'] = df['provider_ccn'].astype(str).str.zfill(6)
+#     cost_dfs.append(df)
 
-cost_df = pd.concat(cost_dfs, ignore_index=True)
+# cost_df = pd.concat(cost_dfs, ignore_index=True)
 
-# Step 2: Load ProviderInfo files
-provider_files = glob.glob("ProviderInfo_20*.csv")
-provider_dfs = []
+# # Step 2: Load ProviderInfo files
+# provider_files = glob.glob("ProviderInfo_20*.csv")
+# provider_dfs = []
 
-for file in provider_files:
-    df = pd.read_csv(file, encoding='ISO-8859-1', low_memory=False)
-    year = int(os.path.basename(file).split("_")[1].split(".")[0])
-    df['year'] = year
+# for file in provider_files:
+#     df = pd.read_csv(file, encoding='ISO-8859-1', low_memory=False)
+#     year = int(os.path.basename(file).split("_")[1].split(".")[0])
+#     df['year'] = year
 
-    # Use exact casing: "Federal Provider Number"
-    if "Federal Provider Number" in df.columns:
-        df['Federal Provider Number'] = df['Federal Provider Number'].astype(str).str.zfill(6)
-        df = df.rename(columns={"Federal Provider Number": "provider_ccn"})
-        provider_dfs.append(df[['provider_ccn', 'year', 'staffing_rating', 'rn_staffing_rating']])
-    else:
-        print(f"⚠️ Skipping {file}: 'Federal Provider Number' column not found.")
+#     # Use exact casing: "Federal Provider Number"
+#     if "Federal Provider Number" in df.columns:
+#         df['Federal Provider Number'] = df['Federal Provider Number'].astype(str).str.zfill(6)
+#         df = df.rename(columns={"Federal Provider Number": "provider_ccn"})
+#         provider_dfs.append(df[['provider_ccn', 'year', 'staffing_rating', 'rn_staffing_rating']])
+#     else:
+#         print(f"⚠️ Skipping {file}: 'Federal Provider Number' column not found.")
 
-provider_df = pd.concat(provider_dfs, ignore_index=True)
+# provider_df = pd.concat(provider_dfs, ignore_index=True)
 
-# Step 3: Merge cost and provider info on provider_ccn + year
-merged_df = pd.merge(
-    cost_df,
-    provider_df,
-    on=['provider_ccn', 'year'],
-    how='inner'
-)
+# # Step 3: Merge cost and provider info on provider_ccn + year
+# merged_df = pd.merge(
+#     cost_df,
+#     provider_df,
+#     on=['provider_ccn', 'year'],
+#     how='inner'
+# )
 
-# Step 4: Compute Occupancy Rate
-merged_df['occupancy_rate'] = merged_df['total_days_total'] / merged_df['total_bed_days_available']
+# # Step 4: Compute Occupancy Rate
+# merged_df['occupancy_rate'] = merged_df['total_days_total'] / merged_df['total_bed_days_available']
 
-# Step 5: Estimate bedcert if needed
-if 'bedcert' not in merged_df.columns:
-    if 'number_of_beds' in merged_df.columns:
-        merged_df['bedcert'] = merged_df['number_of_beds']
-    elif 'total_bed_days_available' in merged_df.columns:
-        merged_df['bedcert'] = merged_df['total_bed_days_available'] / 365
-    else:
-        raise ValueError("❌ Could not compute 'bedcert': missing both 'number_of_beds' and 'total_bed_days_available'")
+# # Step 5: Estimate bedcert if needed
+# if 'bedcert' not in merged_df.columns:
+#     if 'number_of_beds' in merged_df.columns:
+#         merged_df['bedcert'] = merged_df['number_of_beds']
+#     elif 'total_bed_days_available' in merged_df.columns:
+#         merged_df['bedcert'] = merged_df['total_bed_days_available'] / 365
+#     else:
+#         raise ValueError("❌ Could not compute 'bedcert': missing both 'number_of_beds' and 'total_bed_days_available'")
 
-# Step 6: Define features and target (updated feature name here)
-features = [
-    'occupancy_rate',
-    'staffing_rating',
-    'rn_staffing_rating',
-    'total_liabilities',
-    'total_salaries_adjusted',  # <- updated here
-    'bedcert'
-]
-target = 'net_income'
+# # Step 6: Define features and target (updated feature name here)
+# features = [
+#     'occupancy_rate',
+#     'staffing_rating',
+#     'rn_staffing_rating',
+#     'total_liabilities',
+#     'total_salaries_adjusted',  # <- updated here
+#     'bedcert'
+# ]
+# target = 'net_income'
 
-# Step 7: Clean and fit model
-for col in features + [target]:
-    merged_df[col] = pd.to_numeric(merged_df[col], errors='coerce')
+# # Step 7: Clean and fit model
+# for col in features + [target]:
+#     merged_df[col] = pd.to_numeric(merged_df[col], errors='coerce')
 
-data = merged_df.dropna(subset=features + [target])
-X = sm.add_constant(data[features])
-y = data[target]
+# data = merged_df.dropna(subset=features + [target])
+# X = sm.add_constant(data[features])
+# y = data[target]
 
-model = sm.OLS(y, X).fit()
+# model = sm.OLS(y, X).fit()
 
-# Step 8: Show regression summary
-print(model.summary())
+# # Step 8: Show regression summary
+# print(model.summary())
 
 
 
-from sklearn.ensemble import RandomForestRegressor
-from sklearn.metrics import r2_score, mean_squared_error
-import numpy as np
+# from sklearn.ensemble import RandomForestRegressor
+# from sklearn.metrics import r2_score, mean_squared_error
+# import numpy as np
 
-# Step 1: Train the model
-rf = RandomForestRegressor(n_estimators=100, random_state=42)
-rf.fit(X, y)
+# # Step 1: Train the model
+# rf = RandomForestRegressor(n_estimators=100, random_state=42)
+# rf.fit(X, y)
 
-# Step 2: Predict
-y_pred = rf.predict(X)
+# # Step 2: Predict
+# y_pred = rf.predict(X)
 
-# Step 3: Evaluate performance
-r2 = r2_score(y, y_pred)
-rmse = np.sqrt(mean_squared_error(y, y_pred))
+# # Step 3: Evaluate performance
+# r2 = r2_score(y, y_pred)
+# rmse = np.sqrt(mean_squared_error(y, y_pred))
 
-print(f"\n🌲 Random Forest Regressor Results:")
-print(f"R² Score: {r2:.3f}")
-print(f"RMSE: {rmse:,.2f}")
+# print(f"\n🌲 Random Forest Regressor Results:")
+# print(f"R² Score: {r2:.3f}")
+# print(f"RMSE: {rmse:,.2f}")
 
-# Step 4: Feature Importance
-import matplotlib.pyplot as plt
+# # Step 4: Feature Importance
+# import matplotlib.pyplot as plt
 
-importances = rf.feature_importances_
-indices = np.argsort(importances)[::-1]
-features_sorted = X.columns[indices]
+# importances = rf.feature_importances_
+# indices = np.argsort(importances)[::-1]
+# features_sorted = X.columns[indices]
 
-plt.figure(figsize=(8, 6))
-plt.title("Feature Importance (Random Forest)")
-plt.barh(features_sorted, importances[indices], color="skyblue")
-plt.xlabel("Relative Importance")
-plt.gca().invert_yaxis()
-plt.tight_layout()
-plt.show()
+# plt.figure(figsize=(8, 6))
+# plt.title("Feature Importance (Random Forest)")
+# plt.barh(features_sorted, importances[indices], color="skyblue")
+# plt.xlabel("Relative Importance")
+# plt.gca().invert_yaxis()
+# plt.tight_layout()
+# plt.show()
+
+
+
+######################
+
+# import pandas as pd
+# import numpy as np
+# import os
+# import glob
+# from sklearn.model_selection import train_test_split
+# from sklearn.metrics import r2_score, mean_squared_error
+# import matplotlib.pyplot as plt
+# from lightgbm import LGBMRegressor, plot_importance
+
+# # Step 1: Load all cleaned CostReport CSVs (2015–2021)
+# cost_files = {
+#     "2015": "2015_CostReport_cleaned.csv",
+#     "2016": "2016_CostReport_cleaned.csv",
+#     "2017": "2017_CostReport_cleaned.csv",
+#     "2018": "2018_CostReport_cleaned.csv",
+#     "2019": "2019_CostReport_cleaned.csv",
+#     "2020": "2020_CostReport_cleaned.csv",
+#     "2021": "2021_CostReport_cleaned.csv"
+# }
+
+# all_dataframes = []
+# for year, path in cost_files.items():
+#     df = pd.read_csv(path, low_memory=False)
+#     df['year'] = int(year)
+#     all_dataframes.append(df)
+
+# # Combine all years into one DataFrame
+# merged_df = pd.concat(all_dataframes, ignore_index=True)
+
+# # Step 2: Define features and target
+# features = [
+#     'occupancy_rate',
+#     'staffing_rating',
+#     'rn_staffing_rating',
+#     'total_liabilities',
+#     'total_salaries_adjusted',
+#     'bedcert'
+# ]
+# target = 'net_income'
+
+# # Step 3: Ensure columns are numeric
+# for col in features + [target]:
+#     merged_df[col] = pd.to_numeric(merged_df[col], errors='coerce')
+
+# # Step 4: Clean the dataset
+# data = merged_df.dropna(subset=features + [target])
+# X = data[features]
+# y = data[target]
+
+# # Step 5: Split into train/test sets
+# X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+
+# # Step 6: Train the LightGBM model
+# model = LGBMRegressor(n_estimators=100, random_state=42)
+# model.fit(X_train, y_train)
+
+# # Step 7: Evaluate the model
+# y_pred = model.predict(X_test)
+# r2 = r2_score(y_test, y_pred)
+# rmse = np.sqrt(mean_squared_error(y_test, y_pred))
+
+# print("\n🌿 LightGBM Regression Results:")
+# print(f"R² Score: {r2:.4f}")
+# print(f"RMSE: ${rmse:,.2f}")
+
+# # Step 8: Plot feature importance
+# plot_importance(model, title='LightGBM Feature Importance', xlabel='F Score')
+# plt.tight_layout()
+# plt.show()
