@@ -304,6 +304,7 @@ for year, color in year_colors.items():
     fg = folium.FeatureGroup(name=f"{year}", show=True)
     cluster = MarkerCluster().add_to(fg)
 
+#### loop through each row in the year_data DataFrame
     for _, row in year_data.iterrows():
         folium.Marker(
             location=[row['lat'], row['lng']],
@@ -381,6 +382,7 @@ print("Interactive toggle map saved as 'nursing_homes_toggle_by_year.html'")
 # ## Drop rows with missing data
 # data = merged_df.dropna(subset=features + [target])
 
+### data features and target
 # X = data[features]
 # y = data[target]
 
@@ -457,7 +459,7 @@ print("Interactive toggle map saved as 'nursing_homes_toggle_by_year.html'")
 # # Compute Occupancy Rate
 # merged_df['occupancy_rate'] = merged_df['total_days_total'] / merged_df['total_bed_days_available']
 
-# # Step 5: Estimate bedcert if needed
+# ## Estimate bedcert if needed
 # if 'bedcert' not in merged_df.columns:
 #     if 'number_of_beds' in merged_df.columns:
 #         merged_df['bedcert'] = merged_df['number_of_beds']

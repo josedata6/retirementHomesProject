@@ -429,7 +429,7 @@
         "kind": 5,
         "importPath": "project",
         "description": "project",
-        "peekOfCode": "m = folium.Map(location=[merged_df['lat'].mean(), merged_df['lng'].mean()], zoom_start=5)\n# Create a FeatureGroup for each year\nfor year, color in year_colors.items():\n    year_data = merged_df[merged_df['year'] == year]\n    fg = folium.FeatureGroup(name=f\"{year}\", show=True)\n    cluster = MarkerCluster().add_to(fg)\n    for _, row in year_data.iterrows():\n        folium.Marker(\n            location=[row['lat'], row['lng']],\n            popup=f\"{row['address']}, {row['city']}, {row['state']} {row['zip']} ({row['year']})\",",
+        "peekOfCode": "m = folium.Map(location=[merged_df['lat'].mean(), merged_df['lng'].mean()], zoom_start=5)\n# Create a FeatureGroup for each year\nfor year, color in year_colors.items():\n    year_data = merged_df[merged_df['year'] == year]\n    fg = folium.FeatureGroup(name=f\"{year}\", show=True)\n    cluster = MarkerCluster().add_to(fg)\n#### loop through each row in the year_data DataFrame\n    for _, row in year_data.iterrows():\n        folium.Marker(\n            location=[row['lat'], row['lng']],",
         "detail": "project",
         "documentation": {}
     },
