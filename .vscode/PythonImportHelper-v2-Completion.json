@@ -268,7 +268,16 @@
         "kind": 2,
         "importPath": "project",
         "description": "project",
-        "peekOfCode": "def load_address_info(filepath):\n    df = pd.read_csv(filepath, encoding='ISO-8859-1', low_memory=False)\n    df.columns = df.columns.str.strip().str.lower()\n    year = os.path.basename(filepath).split(\"_\")[1]\n    df['year'] = int(year)\n    required_cols = ['address', 'city', 'state', 'zip', 'year']\n    if all(col in df.columns for col in ['address', 'city', 'state', 'zip']):\n        return df[required_cols]\n    else:\n        print(f\"⚠️ Skipping file {filepath}: required address columns not found.\")",
+        "peekOfCode": "def load_address_info(filepath):\n    ## reads file and loads it into a DataFrame\n    df = pd.read_csv(filepath, encoding='ISO-8859-1', low_memory=False) \n    df.columns = df.columns.str.strip().str.lower()\n    year = os.path.basename(filepath).split(\"_\")[1]\n    df['year'] = int(year)\n    required_cols = ['address', 'city', 'state', 'zip', 'year']\n    if all(col in df.columns for col in ['address', 'city', 'state', 'zip']):\n        return df[required_cols]\n    else:",
+        "detail": "project",
+        "documentation": {}
+    },
+    {
+        "label": "merged_df",
+        "kind": 5,
+        "importPath": "project",
+        "description": "project",
+        "peekOfCode": "merged_df = pd.concat(all_dataframes, ignore_index=True)\n# Show the shape or a preview\nprint(\"Merged DataFrame shape:\", merged_df.shape)\nprint(merged_df.head())\n# Check the columns of the merged DataFrame\nprint(merged_df.columns)\n# # Get basic statistics\nprint(merged_df.describe())\n# Yearly average net income\n# # print(merged_df.groupby(\"Year\")['Net_Income'].mean())",
         "detail": "project",
         "documentation": {}
     },
@@ -277,7 +286,7 @@
         "kind": 5,
         "importPath": "project",
         "description": "project",
-        "peekOfCode": "files = glob.glob(\"QualityMsrMDS_20*_Cleaned.csv\")\ndef load_address_info(filepath):\n    df = pd.read_csv(filepath, encoding='ISO-8859-1', low_memory=False)\n    df.columns = df.columns.str.strip().str.lower()\n    year = os.path.basename(filepath).split(\"_\")[1]\n    df['year'] = int(year)\n    required_cols = ['address', 'city', 'state', 'zip', 'year']\n    if all(col in df.columns for col in ['address', 'city', 'state', 'zip']):\n        return df[required_cols]\n    else:",
+        "peekOfCode": "files = glob.glob(\"QualityMsrMDS_20*_Cleaned.csv\")\n## Function to load address info\ndef load_address_info(filepath):\n    ## reads file and loads it into a DataFrame\n    df = pd.read_csv(filepath, encoding='ISO-8859-1', low_memory=False) \n    df.columns = df.columns.str.strip().str.lower()\n    year = os.path.basename(filepath).split(\"_\")[1]\n    df['year'] = int(year)\n    required_cols = ['address', 'city', 'state', 'zip', 'year']\n    if all(col in df.columns for col in ['address', 'city', 'state', 'zip']):",
         "detail": "project",
         "documentation": {}
     },

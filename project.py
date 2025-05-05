@@ -5,8 +5,8 @@ import glob
 import seaborn as sns
 import numpy as np
 
-# Define file paths for each year's data
-# Creates a dictionary called files that maps each year to the corresponding CSV file name
+## Define file paths for each year's data
+## Creates a dictionary called files that maps each year to the corresponding CSV file name
 # files = {
 #     "2015": "2015_CostReport.csv",
 #     "2016": "2016_CostReport.csv",
@@ -14,31 +14,33 @@ import numpy as np
 #     "2018": "2018_CostReport.csv",
 #     "2019": "2019_CostReport.csv",
 #     "2020": "2020_CostReport.csv",
-#     "2021": "2021_CostReport.csv"}
+#     "2021": "2021_CostReport.csv"
+# }
 
-# # Create an empty list to hold each year's DataFrame
+# Create an empty list to hold each year's DataFrame
 # all_dataframes = []
 
-# # Loop through files, read, and append the year
+# Loop through files, read, and append the year
 # for year, path in files.items():
 #     df = pd.read_csv(path, low_memory=False)
 #     df['Year'] = int(year)
 #     all_dataframes.append(df)
 
-# # Concatenate all DataFrames into one
-# merged_df = pd.concat(all_dataframes, ignore_index=True)
+# Concatenate all DataFrames into one
+merged_df = pd.concat(all_dataframes, ignore_index=True)
 
-# # # Show the shape or a preview
-# # print("Merged DataFrame shape:", merged_df.shape)
-# # print(merged_df.head())
+# Show the shape or a preview
+print("Merged DataFrame shape:", merged_df.shape)
+print(merged_df.head())
 
-# # # Check the columns of the merged DataFrame
-# # print(merged_df.columns)
+# Check the columns of the merged DataFrame
+print(merged_df.columns)
 
-# # # Get basic statistics
-# # print(merged_df.describe())
+# # Get basic statistics
+print(merged_df.describe())
 
-# # print(merged_df.groupby("Year")['Net_Income'].mean())  # Yearly average net income
+# Yearly average net income
+# # print(merged_df.groupby("Year")['Net_Income'].mean())
 
 # financial_metrics = [
 #     'net_income',
@@ -101,37 +103,37 @@ import numpy as np
 ################ analyzing health deficiencies data ######################
 ##############################################################
 
-# # # ✅ Step 1: Use explicit relative path (./ = current directory)
+# # #Use explicit relative path (./ = current directory)
 # health_files = glob.glob("./HealthDeficiencies_*.csv")
 
-# # ✅ Step 2: Function to load and label year
+# # Function to load and label year
 # def load_health_file(file_path):
 #     df = pd.read_csv(file_path, encoding='ISO-8859-1', low_memory=False)
 #     year = os.path.basename(file_path).split("_")[1].split(".")[0]
 #     df["Year"] = int(year)
 #     return df
 
-# ✅ Step 3: Read and combine all files
+## Read and combine all files
 # all_dfs = [load_health_file(f) for f in health_files]
 
-# # ✅ Step 4: Check how many files were loaded
-# print(f"✅ Loaded {len(all_dfs)} files:")
+# ## Check how many files were loaded
+# print(f"Loaded {len(all_dfs)} files:")
 # for f in health_files:
 #     print(f)
 
-# ✅ Step 5: Merge them
+## Merge them
 # health_df = pd.concat(all_dfs, ignore_index=True)
 
-# # ✅ Step 6: Summarize
-# summary = health_df.groupby("Year").agg(
-#     Total_Reports=('provnum', 'count'),
-#     Unique_Providers=('provnum', 'nunique'),
-#     Complaint_Related=('complaint', lambda x: (x == 'Y').sum())
+# ## Summarize
+# summary = health_df.groupby("Year").agg( # Group by year
+#     Total_Reports=('provnum', 'count'), # Count total reports
+#     Unique_Providers=('provnum', 'nunique'), # Count unique providers
+#     Complaint_Related=('complaint', lambda x: (x == 'Y').sum()) # # Count complaint-related reports
 # )
-
+## The proportion of health deficiency reports that were complaint-related, rounded to 2 decimal places.
 # summary['Complaint_Ratio'] = (summary['Complaint_Related'] / summary['Total_Reports']).round(2)
 
-# print("\n📊 Health Deficiency Summary by Year (2015–2021):")
+# print("\nHealth Deficiency Summary by Year (2015–2021):")
 # print(summary)
 
 
@@ -139,16 +141,16 @@ import numpy as np
 ################################################################
 ### deficiency summary df that contains summary stats per provider per year
 
-# Step 1: Standardize column names
+### Standardize column names
 # health_df.columns = health_df.columns.str.strip().str.lower()
 
-# # Step 2: Group by provider and year to summarize
-# deficiency_summary_df = health_df.groupby(['provnum', 'year']).agg(
-#     total_deficiencies=('tag', 'count'),
-#     complaint_deficiencies=('complaint', lambda x: (x == 'Y').sum())
-# ).reset_index()
+# ## Group by provider and year to summarize
+# deficiency_summary_df = health_df.groupby(['provnum', 'year']).agg( 
+#     total_deficiencies=('tag', 'count'), # the total number of deficiencies
+#     complaint_deficiencies=('complaint', lambda x: (x == 'Y').sum()) ## the number of complaint-related deficiencies
+# ).reset_index() ## reset index to get a flat DataFrame
 
-# # Step 3: Create complaint ratio
+##vCreate complaint ratio
 # deficiency_summary_df['complaint_ratio'] = (deficiency_summary_df['complaint_deficiencies'] / deficiency_summary_df['total_deficiencies']).round(2)
 
 # # Preview
@@ -159,10 +161,10 @@ import numpy as np
 # deficiency_summary_df['provnum'] = deficiency_summary_df['provnum'].astype(str)
 
 # # Merge on Provider ID and Year
-# merged_final_df = pd.merge(merged_df, deficiency_summary_df,
-#                            left_on=['Provider_CCN', 'Year'],
-#                            right_on=['provnum', 'year'],
-#                            how='left')
+# merged_final_df = pd.merge(merged_df, deficiency_summary_df, ## merge the two DataFrames
+#                            left_on=['Provider_CCN', 'Year'], ## left_on is the key in merged_df
+#                            right_on=['provnum', 'year'], ## right_on is the key in deficiency_summary_df
+#                            how='left') ## left join to keep all records from merged_df
 
 
 
@@ -178,17 +180,16 @@ import numpy as np
 
 ##############################
 ## adds map with homes #####
-# 📦 First install necessary packages if you haven't
-# pip install pandas folium
 
 # import pandas as pd
 # import glob
 # import folium
 # from folium.plugins import MarkerCluster
 
-# # ✅ Step 1: Load all QualityMsrMDS files
-# files = glob.glob("QualityMsrMDS_20*_Cleaned.csv")  # Adjust path if needed
+# ## Load all QualityMsrMDS files
+# files = glob.glob("QualityMsrMDS_20*_Cleaned.csv")  # gets all files matching the pattern
 
+## function to load address info
 # def load_address_info(filepath):
 #     df = pd.read_csv(filepath, encoding='ISO-8859-1', low_memory=False)
 #     df.columns = df.columns.str.strip().str.lower()
@@ -196,16 +197,18 @@ import numpy as np
 #     if all(col in df.columns for col in required_cols):
 #         return df[required_cols]
 #     else:
-#         print(f"⚠️ Skipping file {filepath}: required address columns not found.")
+#         print(f"Skipping file {filepath}: required address columns not found.")
 #         return pd.DataFrame()
 
-# # ✅ Step 2: Combine and deduplicate addresses
+# # Combine and deduplicate addresses
 # address_df = pd.concat([load_address_info(f) for f in files], ignore_index=True)
 # address_df.drop_duplicates(subset=['address', 'city', 'state', 'zip'], inplace=True)
 
-# # ✅ Step 3: Load ZIP code coordinates
-# zip_latlng_df = pd.read_csv('uszips.csv')  # Must contain 'zip', 'lat', 'lng' columns
-# zip_latlng_df['zip'] = zip_latlng_df['zip'].astype(str).str.zfill(5)
+# # Load ZIP code coordinates
+# zip_latlng_df = pd.read_csv('uszips.csv')  # Must contain 'zip', 'lat', 'lng' columns 
+## takes variable zip and converts it to string, then pads with leading zeros to make it 5 digits
+# zip_latlng_df['zip'] = zip_latlng_df['zip'].astype(str).str.zfill(5) 
+## takes variable zip and converts it to string, then pads with leading zeros to make it 5 digits
 # address_df['zip'] = address_df['zip'].astype(str).str.zfill(5)
 
 # # Step 4: Merge address info with ZIP coordinates
@@ -215,10 +218,10 @@ import numpy as np
 #     how='inner',
 #     on='zip'
 # )
-# # ✅ Step 5: Create the Map
+# ## Create the Map
 # m = folium.Map(location=[merged_df['lat'].mean(), merged_df['lng'].mean()], zoom_start=5)
 
-# # ✅ Step 6: Add Clustering
+# ## Add Clustering
 # marker_cluster = MarkerCluster().add_to(m)
 
 # for _, row in merged_df.iterrows():
@@ -228,9 +231,9 @@ import numpy as np
 #         icon=folium.Icon(color='blue', icon='home')
 #     ).add_to(marker_cluster)
 
-# # ✅ Step 7: Save Map
+### Save Map html file
 # m.save("nursing_homes_map_clustered.html")
-# print("✅ Map saved as 'nursing_homes_map_clustered.html'. Open it in your browser!")
+# print("Map saved as 'nursing_homes_map_clustered.html'. Open it in browser to view.")
 
 
 ######################################################
@@ -241,11 +244,13 @@ import glob
 import folium
 from folium.plugins import MarkerCluster
 
-# Step 1: Load all QualityMsrMDS files
+### Load all QualityMsrMDS files
 files = glob.glob("QualityMsrMDS_20*_Cleaned.csv")
 
+## Function to load address info
 def load_address_info(filepath):
-    df = pd.read_csv(filepath, encoding='ISO-8859-1', low_memory=False)
+    ## reads file and loads it into a DataFrame
+    df = pd.read_csv(filepath, encoding='ISO-8859-1', low_memory=False) 
     df.columns = df.columns.str.strip().str.lower()
     year = os.path.basename(filepath).split("_")[1]
     df['year'] = int(year)
