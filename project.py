@@ -7,87 +7,87 @@ import numpy as np
 
 # Define file paths for each year's data
 # Creates a dictionary called files that maps each year to the corresponding CSV file name
-files = {
-    "2015": "2015_CostReport.csv",
-    "2016": "2016_CostReport.csv",
-    "2017": "2017_CostReport.csv",
-    "2018": "2018_CostReport.csv",
-    "2019": "2019_CostReport.csv",
-    "2020": "2020_CostReport.csv",
-    "2021": "2021_CostReport.csv"}
+# files = {
+#     "2015": "2015_CostReport.csv",
+#     "2016": "2016_CostReport.csv",
+#     "2017": "2017_CostReport.csv",
+#     "2018": "2018_CostReport.csv",
+#     "2019": "2019_CostReport.csv",
+#     "2020": "2020_CostReport.csv",
+#     "2021": "2021_CostReport.csv"}
 
-# Create an empty list to hold each year's DataFrame
-all_dataframes = []
+# # Create an empty list to hold each year's DataFrame
+# all_dataframes = []
 
-# Loop through files, read, and append the year
-for year, path in files.items():
-    df = pd.read_csv(path, low_memory=False)
-    df['Year'] = int(year)
-    all_dataframes.append(df)
+# # Loop through files, read, and append the year
+# for year, path in files.items():
+#     df = pd.read_csv(path, low_memory=False)
+#     df['Year'] = int(year)
+#     all_dataframes.append(df)
 
-# Concatenate all DataFrames into one
-merged_df = pd.concat(all_dataframes, ignore_index=True)
+# # Concatenate all DataFrames into one
+# merged_df = pd.concat(all_dataframes, ignore_index=True)
 
-# # Show the shape or a preview
-# print("Merged DataFrame shape:", merged_df.shape)
-# print(merged_df.head())
+# # # Show the shape or a preview
+# # print("Merged DataFrame shape:", merged_df.shape)
+# # print(merged_df.head())
 
-# # Check the columns of the merged DataFrame
-# print(merged_df.columns)
+# # # Check the columns of the merged DataFrame
+# # print(merged_df.columns)
 
-# # Get basic statistics
-# print(merged_df.describe())
+# # # Get basic statistics
+# # print(merged_df.describe())
 
-# print(merged_df.groupby("Year")['Net_Income'].mean())  # Yearly average net income
+# # print(merged_df.groupby("Year")['Net_Income'].mean())  # Yearly average net income
 
-financial_metrics = [
-    'net_income',
-    'gross_revenue',
-    'total_income',
-    'total_costs',
-    'total_current_assets',
-    'total_current_liabilities',
-    'total_liabilities',
-    'total_fund_balances',
-    'total_fixed_assets'
-]
-# Convert financial metrics to numeric, coercing errors to NaN
-# This will ensure that any non-numeric values in these columns are converted to NaN
-for col in financial_metrics:
-    merged_df[col] = pd.to_numeric(merged_df[col], errors='coerce')
+# financial_metrics = [
+#     'net_income',
+#     'gross_revenue',
+#     'total_income',
+#     'total_costs',
+#     'total_current_assets',
+#     'total_current_liabilities',
+#     'total_liabilities',
+#     'total_fund_balances',
+#     'total_fixed_assets'
+# ]
+# # Convert financial metrics to numeric, coercing errors to NaN
+# # This will ensure that any non-numeric values in these columns are converted to NaN
+# for col in financial_metrics:
+#     merged_df[col] = pd.to_numeric(merged_df[col], errors='coerce')
 
-yearly_summary = merged_df.groupby("Year")[financial_metrics].mean()
-print(yearly_summary)
+# yearly_summary = merged_df.groupby("Year")[financial_metrics].mean()
+# print(yearly_summary)
 
-yearly_summary['profit_margin'] = yearly_summary['net_income'] / yearly_summary['gross_revenue']
-yearly_summary['roa'] = yearly_summary['net_income'] / (yearly_summary['total_current_assets'] + yearly_summary['total_fixed_assets'])
-yearly_summary['liability_to_asset_ratio'] = yearly_summary['total_liabilities'] / (yearly_summary['total_current_assets'] + yearly_summary['total_fixed_assets'])
-yearly_summary['current_ratio'] = yearly_summary['total_current_assets'] / yearly_summary['total_current_liabilities']
-yearly_summary['debt_to_equity_ratio'] = yearly_summary['total_liabilities'] / yearly_summary['total_fund_balances']
-yearly_summary['asset_turnover'] = yearly_summary['gross_revenue'] / (yearly_summary['total_current_assets'] + yearly_summary['total_fixed_assets'])
-yearly_summary['return_on_equity'] = yearly_summary['net_income'] / yearly_summary['total_fund_balances']
-yearly_summary['return_on_assets'] = yearly_summary['net_income'] / (yearly_summary['total_current_assets'] + yearly_summary['total_fixed_assets'])
-yearly_summary['return_on_investment'] = yearly_summary['net_income'] / (yearly_summary['total_current_assets'] + yearly_summary['total_fixed_assets'])
-yearly_summary['debt_ratio'] = yearly_summary['total_liabilities'] / (yearly_summary['total_current_assets'] + yearly_summary['total_fixed_assets'])
+# yearly_summary['profit_margin'] = yearly_summary['net_income'] / yearly_summary['gross_revenue']
+# yearly_summary['roa'] = yearly_summary['net_income'] / (yearly_summary['total_current_assets'] + yearly_summary['total_fixed_assets'])
+# yearly_summary['liability_to_asset_ratio'] = yearly_summary['total_liabilities'] / (yearly_summary['total_current_assets'] + yearly_summary['total_fixed_assets'])
+# yearly_summary['current_ratio'] = yearly_summary['total_current_assets'] / yearly_summary['total_current_liabilities']
+# yearly_summary['debt_to_equity_ratio'] = yearly_summary['total_liabilities'] / yearly_summary['total_fund_balances']
+# yearly_summary['asset_turnover'] = yearly_summary['gross_revenue'] / (yearly_summary['total_current_assets'] + yearly_summary['total_fixed_assets'])
+# yearly_summary['return_on_equity'] = yearly_summary['net_income'] / yearly_summary['total_fund_balances']
+# yearly_summary['return_on_assets'] = yearly_summary['net_income'] / (yearly_summary['total_current_assets'] + yearly_summary['total_fixed_assets'])
+# yearly_summary['return_on_investment'] = yearly_summary['net_income'] / (yearly_summary['total_current_assets'] + yearly_summary['total_fixed_assets'])
+# yearly_summary['debt_ratio'] = yearly_summary['total_liabilities'] / (yearly_summary['total_current_assets'] + yearly_summary['total_fixed_assets'])
 
-# Plot Net Income
-yearly_summary['net_income'].plot(marker='o', title='Average Net Income Over Time')
-plt.ylabel("Net Income ($)")
-plt.grid(True)
-plt.show()
+# # Plot Net Income
+# yearly_summary['net_income'].plot(marker='o', title='Average Net Income Over Time')
+# plt.ylabel("Net Income ($)")
+# plt.grid(True)
+# plt.show()
 
-# Plot Profit Margin
-yearly_summary['profit_margin'].plot(marker='o', title='Profit Margin Over Time')
-plt.ylabel("Profit Margin")
-plt.grid(True)
-plt.show()
+# # Plot Profit Margin
+# yearly_summary['profit_margin'].plot(marker='o', title='Profit Margin Over Time')
+# plt.ylabel("Profit Margin")
+# plt.grid(True)
+# plt.show()
 
-# Round for readability
-yearly_summary = yearly_summary.round(2)
+# # Round for readability
+# yearly_summary = yearly_summary.round(2)
 
-# Display the summary
-print("Yearly Financial Performance Summary:")
-print(yearly_summary)
+# # Display the summary
+# print("Yearly Financial Performance Summary:")
+# print(yearly_summary)
 
 
 # #################
@@ -101,38 +101,38 @@ print(yearly_summary)
 ################ analyzing health deficiencies data ######################
 ##############################################################
 
-# ✅ Step 1: Use explicit relative path (./ = current directory)
-health_files = glob.glob("./HealthDeficiencies_*.csv")
+# # # ✅ Step 1: Use explicit relative path (./ = current directory)
+# health_files = glob.glob("./HealthDeficiencies_*.csv")
 
-# ✅ Step 2: Function to load and label year
-def load_health_file(file_path):
-    df = pd.read_csv(file_path, encoding='ISO-8859-1', low_memory=False)
-    year = os.path.basename(file_path).split("_")[1].split(".")[0]
-    df["Year"] = int(year)
-    return df
+# # ✅ Step 2: Function to load and label year
+# def load_health_file(file_path):
+#     df = pd.read_csv(file_path, encoding='ISO-8859-1', low_memory=False)
+#     year = os.path.basename(file_path).split("_")[1].split(".")[0]
+#     df["Year"] = int(year)
+#     return df
 
 # ✅ Step 3: Read and combine all files
-all_dfs = [load_health_file(f) for f in health_files]
+# all_dfs = [load_health_file(f) for f in health_files]
 
-# ✅ Step 4: Check how many files were loaded
-print(f"✅ Loaded {len(all_dfs)} files:")
-for f in health_files:
-    print(f)
+# # ✅ Step 4: Check how many files were loaded
+# print(f"✅ Loaded {len(all_dfs)} files:")
+# for f in health_files:
+#     print(f)
 
 # ✅ Step 5: Merge them
-health_df = pd.concat(all_dfs, ignore_index=True)
+# health_df = pd.concat(all_dfs, ignore_index=True)
 
-# ✅ Step 6: Summarize
-summary = health_df.groupby("Year").agg(
-    Total_Reports=('provnum', 'count'),
-    Unique_Providers=('provnum', 'nunique'),
-    Complaint_Related=('complaint', lambda x: (x == 'Y').sum())
-)
+# # ✅ Step 6: Summarize
+# summary = health_df.groupby("Year").agg(
+#     Total_Reports=('provnum', 'count'),
+#     Unique_Providers=('provnum', 'nunique'),
+#     Complaint_Related=('complaint', lambda x: (x == 'Y').sum())
+# )
 
-summary['Complaint_Ratio'] = (summary['Complaint_Related'] / summary['Total_Reports']).round(2)
+# summary['Complaint_Ratio'] = (summary['Complaint_Related'] / summary['Total_Reports']).round(2)
 
-print("\n📊 Health Deficiency Summary by Year (2015–2021):")
-print(summary)
+# print("\n📊 Health Deficiency Summary by Year (2015–2021):")
+# print(summary)
 
 
 
@@ -158,7 +158,7 @@ print(summary)
 # merged_df['Provider_CCN'] = merged_df['Provider_CCN'].astype(str)
 # deficiency_summary_df['provnum'] = deficiency_summary_df['provnum'].astype(str)
 
-# Merge on Provider ID and Year
+# # Merge on Provider ID and Year
 # merged_final_df = pd.merge(merged_df, deficiency_summary_df,
 #                            left_on=['Provider_CCN', 'Year'],
 #                            right_on=['provnum', 'year'],
@@ -174,228 +174,506 @@ print(summary)
 # # Assume you have deficiency summary per provider-year
 # merged_df = pd.merge(merged_df, deficiency_summary_df, left_on=['Provider_CCN', 'Year'], right_on=['provnum', 'Year'], how='left')
 
-##########################################
-############ getting the average total salaries adjusted by year
-# # This code calculates the average total salaries adjusted for each year from 2015 to 2021
-# # and plots the results.
-# import pandas as pd
-# import matplotlib.pyplot as plt
-
-# # List of files and years
-# files = {
-#     "2015": "2015_CostReport_cleaned.csv",
-#     "2016": "2016_CostReport_cleaned.csv",
-#     "2017": "2017_CostReport_cleaned.csv",
-#     "2018": "2018_CostReport_cleaned.csv",
-#     "2019": "2019_CostReport_cleaned.csv",
-#     "2020": "2020_CostReport_cleaned.csv",
-#     "2021": "2021_CostReport_cleaned.csv"
-# }
-
-# # Create an empty list to hold the data
-# salary_data = []
-
-# # Loop through each file
-# for year, filename in files.items():
-#     # Load the data
-#     df = pd.read_csv(filename, low_memory=False)
-    
-#     # Ensure the total_salaries_adjusted column is numeric
-#     df['total_salaries_adjusted'] = pd.to_numeric(df['total_salaries_adjusted'], errors='coerce')
-    
-#     # Calculate the average (mean) salary for that year
-#     avg_salary = df['total_salaries_adjusted'].mean()
-    
-#     # Store the result
-#     salary_data.append({
-#         "Year": int(year),
-#         "Average_Total_Salaries_Adjusted": avg_salary
-#     })
-
-# # Convert to a DataFrame
-# salary_df = pd.DataFrame(salary_data)
-
-# # Sort by Year
-# salary_df = salary_df.sort_values("Year")
-
-# # Print the results
-# print("\nAverage Total Salaries Adjusted by Year:")
-# print(salary_df)
-
-# # Plot the results
-# plt.figure(figsize=(10, 6))
-# plt.plot(salary_df['Year'], salary_df['Average_Total_Salaries_Adjusted'], marker='o')
-# plt.title('Average Total Salaries Adjusted (2015-2021)')
-# plt.xlabel('Year')
-# plt.ylabel('Average Total Salaries ($)')
-# plt.grid(True)
-# plt.show()
-
-# # Optional: Save to a CSV for further analysis
-# salary_df.to_csv("average_total_salaries_adjusted_2015_2021.csv", index=False)
-# print("\nResults saved to 'average_total_salaries_adjusted_2015_2021.csv'")
 
 
-################################################################
-##### Compare Total Gross Income vs Total Salaries Adjusted
-# This code compares the total gross income and total salaries adjusted for each year from 2015 to 2021
-# and plots the results.
+##############################
+## adds map with homes #####
+# 📦 First install necessary packages if you haven't
+# pip install pandas folium
 
 # import pandas as pd
-# import matplotlib.pyplot as plt
+# import glob
+# import folium
+# from folium.plugins import MarkerCluster
 
-# # Define your files and years
-# files = {
-#     "2015": "2015_CostReport_cleaned.csv",
-#     "2016": "2016_CostReport_cleaned.csv",
-#     "2017": "2017_CostReport_cleaned.csv",
-#     "2018": "2018_CostReport_cleaned.csv",
-#     "2019": "2019_CostReport_cleaned.csv",
-#     "2020": "2020_CostReport_cleaned.csv",
-#     "2021": "2021_CostReport_cleaned.csv"
-# }
+# # ✅ Step 1: Load all QualityMsrMDS files
+# files = glob.glob("QualityMsrMDS_20*_Cleaned.csv")  # Adjust path if needed
 
-# # List to collect the data
-# comparison_data = []
+# def load_address_info(filepath):
+#     df = pd.read_csv(filepath, encoding='ISO-8859-1', low_memory=False)
+#     df.columns = df.columns.str.strip().str.lower()
+#     required_cols = ['address', 'city', 'state', 'zip']
+#     if all(col in df.columns for col in required_cols):
+#         return df[required_cols]
+#     else:
+#         print(f"⚠️ Skipping file {filepath}: required address columns not found.")
+#         return pd.DataFrame()
 
-# # Loop through each file
-# for year, filename in files.items():
-#     try:
-#         # Load data
-#         df = pd.read_csv(filename, low_memory=False)
+# # ✅ Step 2: Combine and deduplicate addresses
+# address_df = pd.concat([load_address_info(f) for f in files], ignore_index=True)
+# address_df.drop_duplicates(subset=['address', 'city', 'state', 'zip'], inplace=True)
 
-#         # Make sure both columns exist
-#         if 'gross_revenue' in df.columns and 'total_salaries_adjusted' in df.columns:
-#             # Convert columns to numeric safely
-#             df['gross_revenue'] = pd.to_numeric(df['gross_revenue'], errors='coerce')
-#             df['total_salaries_adjusted'] = pd.to_numeric(df['total_salaries_adjusted'], errors='coerce')
+# # ✅ Step 3: Load ZIP code coordinates
+# zip_latlng_df = pd.read_csv('uszips.csv')  # Must contain 'zip', 'lat', 'lng' columns
+# zip_latlng_df['zip'] = zip_latlng_df['zip'].astype(str).str.zfill(5)
+# address_df['zip'] = address_df['zip'].astype(str).str.zfill(5)
 
-#             # Calculate total gross revenue and total salaries adjusted
-#             total_gross_income = df['gross_revenue'].sum()
-#             total_salaries = df['total_salaries_adjusted'].sum()
-#             salary_burden_ratio = total_salaries / total_gross_income if total_gross_income != 0 else None
-#             difference = total_gross_income - total_salaries
+# # Step 4: Merge address info with ZIP coordinates
+# merged_df = pd.merge(
+#     address_df,               # Keep all original columns: address, city, state, zip
+#     zip_latlng_df[['zip', 'lat', 'lng']],  # Only bring in lat/lng
+#     how='inner',
+#     on='zip'
+# )
+# # ✅ Step 5: Create the Map
+# m = folium.Map(location=[merged_df['lat'].mean(), merged_df['lng'].mean()], zoom_start=5)
 
-#             # Save the results
-#             comparison_data.append({
-#                 'Year': int(year),
-#                 'Total_Gross_Income': total_gross_income,
-#                 'Total_Salaries_Adjusted': total_salaries,
-#                 'Difference_GrossIncome_vs_Salaries': difference,
-#                 'Salary_Burden_Ratio': salary_burden_ratio
-#             })
-#         else:
-#             print(f"Missing expected columns in {filename}, skipping...")
-#     except Exception as e:
-#         print(f"Error processing {filename}: {e}")
+# # ✅ Step 6: Add Clustering
+# marker_cluster = MarkerCluster().add_to(m)
 
-# # Convert to DataFrame
-# comparison_df = pd.DataFrame(comparison_data)
+# for _, row in merged_df.iterrows():
+#     folium.Marker(
+#         location=[row['lat'], row['lng']],
+#         popup=f"{row['address']}, {row['city']}, {row['state']} {row['zip']}",
+#         icon=folium.Icon(color='blue', icon='home')
+#     ).add_to(marker_cluster)
 
-# # Sort by year
-# comparison_df = comparison_df.sort_values('Year')
+# # ✅ Step 7: Save Map
+# m.save("nursing_homes_map_clustered.html")
+# print("✅ Map saved as 'nursing_homes_map_clustered.html'. Open it in your browser!")
 
-# # Round the numbers for easier reading
-# comparison_df = comparison_df.round(2)
 
-# # Print out the results
-# print("\nGross Income vs Salaries Comparison (2015-2021):")
-# print(comparison_df)
-
-# # Plotting Gross Income and Salaries
-# plt.figure(figsize=(12, 7))
-# plt.plot(comparison_df['Year'], comparison_df['Total_Gross_Income'], marker='o', label='Total Gross Income')
-# plt.plot(comparison_df['Year'], comparison_df['Total_Salaries_Adjusted'], marker='s', label='Total Salaries Adjusted')
-
-# plt.title('Total Gross Income vs Total Salaries Adjusted (2015-2021)')
-# plt.xlabel('Year')
-# plt.ylabel('Dollars ($)')
-# plt.grid(True)
-# plt.legend()
-# plt.tight_layout()
-# plt.show()
-
-# # Plotting Salary Burden Ratio
-# plt.figure(figsize=(10, 6))
-# plt.plot(comparison_df['Year'], comparison_df['Salary_Burden_Ratio'], marker='^', color='green')
-# plt.title('Salary Burden Ratio Over Time (Salaries ÷ Gross Income)')
-# plt.xlabel('Year')
-# plt.ylabel('Salary Burden Ratio')
-# plt.grid(True)
-# plt.tight_layout()
-# plt.show()
-
-# # Save to CSV if needed
-# comparison_df.to_csv('gross_income_vs_salaries_with_burden_ratio.csv', index=False)
-# print("\nFull comparison data saved to 'gross_income_vs_salaries_with_burden_ratio.csv'")
-
-##############################################################
-################ Average Certified Beds and Residents by Year ##################
-# This code calculates the average number of certified beds and residents for each year from 2015 to 2021
-# and plots the results.
+######################################################
+##### Map with nursing homes by year and legend #####
 
 import pandas as pd
-import matplotlib.pyplot as plt
+import glob
+import folium
+from folium.plugins import MarkerCluster
 
-# Files and years mapping
-files = {
-    "2015": "ProviderInfo_2015.csv",
-    "2016": "ProviderInfo_2016.csv",
-    "2017": "ProviderInfo_2017.csv",
-    "2018": "ProviderInfo_2018.csv",
-    "2019": "ProviderInfo_2019.csv",
-    "2020": "ProviderInfo_2020.csv",
-    "2021": "ProviderInfo_2021.csv"
+# Step 1: Load all QualityMsrMDS files
+files = glob.glob("QualityMsrMDS_20*_Cleaned.csv")
+
+def load_address_info(filepath):
+    df = pd.read_csv(filepath, encoding='ISO-8859-1', low_memory=False)
+    df.columns = df.columns.str.strip().str.lower()
+    year = os.path.basename(filepath).split("_")[1]
+    df['year'] = int(year)
+    required_cols = ['address', 'city', 'state', 'zip', 'year']
+    if all(col in df.columns for col in ['address', 'city', 'state', 'zip']):
+        return df[required_cols]
+    else:
+        print(f"⚠️ Skipping file {filepath}: required address columns not found.")
+        return pd.DataFrame()
+
+# Combine and deduplicate
+address_df = pd.concat([load_address_info(f) for f in files], ignore_index=True)
+address_df.drop_duplicates(subset=['address', 'city', 'state', 'zip'], inplace=True)
+
+# Load ZIP code coordinates
+zip_latlng_df = pd.read_csv('uszips.csv')
+zip_latlng_df['zip'] = zip_latlng_df['zip'].astype(str).str.zfill(5)
+address_df['zip'] = address_df['zip'].astype(str).str.zfill(5)
+
+# Merge
+merged_df = pd.merge(
+    address_df,
+    zip_latlng_df[['zip', 'lat', 'lng']],
+    how='inner',
+    on='zip'
+)
+
+print(f"✅ Total records after merging with ZIP coordinates: {len(merged_df)}")
+
+# Color palette for each year
+year_colors = {
+    2015: 'blue',
+    2016: 'green',
+    2017: 'purple',
+    2018: 'orange',
+    2019: 'red',
+    2020: 'pink',
+    2021: 'cadetblue'
 }
 
-# Empty list to store data
-provider_data = []
+# Create base map
+m = folium.Map(location=[merged_df['lat'].mean(), merged_df['lng'].mean()], zoom_start=5)
 
-# Loop through each year and file
-for year, filename in files.items():
-    # Load the CSV
-    df = pd.read_csv(filename, encoding='ISO-8859-1', low_memory=False)
-    
-    # Ensure numeric values
-    df['BEDCERT'] = pd.to_numeric(df['BEDCERT'], errors='coerce')
-    df['RESTOT'] = pd.to_numeric(df['RESTOT'], errors='coerce')
-    
-    # Calculate averages
-    avg_beds = df['BEDCERT'].mean()
-    avg_residents = df['RESTOT'].mean()
-    
-    # Save the results
-    provider_data.append({
-        "Year": int(year),
-        "Average_Certified_Beds": avg_beds,
-        "Average_Residents": avg_residents
-    })
+# Create a FeatureGroup for each year
+for year, color in year_colors.items():
+    year_data = merged_df[merged_df['year'] == year]
+    fg = folium.FeatureGroup(name=f"{year}", show=True)
+    cluster = MarkerCluster().add_to(fg)
 
-# Convert to DataFrame
-provider_df = pd.DataFrame(provider_data)
+    for _, row in year_data.iterrows():
+        folium.Marker(
+            location=[row['lat'], row['lng']],
+            popup=f"{row['address']}, {row['city']}, {row['state']} {row['zip']} ({row['year']})",
+            icon=folium.Icon(color=color, icon='home')
+        ).add_to(cluster)
 
-# Sort by year
-provider_df = provider_df.sort_values("Year")
+    fg.add_to(m)
 
-# Show the results
-print("\nAverage Certified Beds and Residents by Year:")
-print(provider_df)
+# Add layer control
+folium.LayerControl(collapsed=False).add_to(m)
 
-# Plot Certified Beds over time
-plt.figure(figsize=(10, 5))
-plt.plot(provider_df['Year'], provider_df['Average_Certified_Beds'], marker='o', label='Certified Beds')
-plt.plot(provider_df['Year'], provider_df['Average_Residents'], marker='o', label='Residents')
-plt.title('Average Certified Beds and Residents (2015–2021)')
-plt.xlabel('Year')
-plt.ylabel('Count')
-plt.legend()
-plt.grid(True)
-plt.show()
-
-# # Optional: Save to CSV
-# provider_df.to_csv("average_beds_residents_2015_2021.csv", index=False)
-# print("\nResults saved to 'average_beds_residents_2015_2021.csv'")
-
+# Save the map
+m.save("nursing_homes_toggle_by_year.html")
+print("✅ Interactive toggle map saved as 'nursing_homes_toggle_by_year.html'")
 
 ###################################
+######### Regression Analysis ######
 
+# import pandas as pd
+# import statsmodels.api as sm
+# import matplotlib.pyplot as plt
+
+# files = {
+#     "2015": "2015_CostReport_cleaned.csv",
+#     "2016": "2016_CostReport_cleaned.csv",
+#     "2017": "2017_CostReport_cleaned.csv",
+#     "2018": "2018_CostReport_cleaned.csv",
+#     "2019": "2019_CostReport_cleaned.csv",
+#     "2020": "2020_CostReport_cleaned.csv",
+#     "2021": "2021_CostReport_cleaned.csv"}
+
+# # Create an empty list to hold each year's DataFrame
+# all_dataframes = []
+
+# # Loop through files, read, and append the year
+# for year, path in files.items():
+#     df = pd.read_csv(path, low_memory=False)
+#     df['Year'] = int(year)
+#     all_dataframes.append(df)
+
+# # Concatenate all DataFrames into one
+# merged_df = pd.concat(all_dataframes, ignore_index=True)
+
+# health_files = glob.glob("./HealthDeficiencies_*.csv")
+
+# # ✅ Step 2: Function to load and label year
+# def load_health_file(file_path):
+#     df = pd.read_csv(file_path, encoding='ISO-8859-1', low_memory=False)
+#     year = os.path.basename(file_path).split("_")[1].split(".")[0]
+#     df["Year"] = int(year)
+#     return df
+
+# # ✅ Step 3: Read and combine all files
+# all_dfs = [load_health_file(f) for f in health_files]
+
+
+# # ✅ Step 5: Merge them
+# health_df = pd.concat(all_dfs, ignore_index=True)
+
+
+# # ✅ Step 1: Select your features and target
+# # Make sure the following columns exist in your merged DataFrame
+# features = [
+#     'occupancy_rate',
+#     'staffing_rating',
+#     'rn_staffing_rating',
+#     'total_liabilities',
+#     'total_salaries_from_worksheet_a',
+#     'bedcert'
+# ]
+
+# target = 'net_income'
+
+# # ✅ Step 2: Drop rows with missing data
+# data = merged_df.dropna(subset=features + [target])
+
+# X = data[features]
+# y = data[target]
+
+# # ✅ Step 3: Add constant term for intercept
+# X = sm.add_constant(X)
+
+# # ✅ Step 4: Fit the model using statsmodels
+# model = sm.OLS(y, X).fit()
+
+# # ✅ Step 5: Print summary of results
+# print(model.summary())
+
+##################################################
+#### regression analysis with all years combined ####
+
+# import pandas as pd
+# import statsmodels.api as sm
+# import glob
+# import os
+
+# # Step 1: Load all CostReport CSVs (2015–2021)
+# cost_files = {
+#     "2015": "2015_CostReport.csv",
+#     "2016": "2016_CostReport.csv",
+#     "2017": "2017_CostReport.csv",
+#     "2018": "2018_CostReport.csv",
+#     "2019": "2019_CostReport.csv",
+#     "2020": "2020_CostReport.csv",
+#     "2021": "2021_CostReport.csv"
+# }
+
+# cost_dfs = []
+# for year, path in cost_files.items():
+#     df = pd.read_csv(path, low_memory=False)
+#     df['year'] = int(year)
+#     df['provider_ccn'] = df['provider_ccn'].astype(str).str.zfill(6)
+#     cost_dfs.append(df)
+
+# cost_df = pd.concat(cost_dfs, ignore_index=True)
+
+# # Step 2: Load ProviderInfo files
+# provider_files = glob.glob("ProviderInfo_20*.csv")
+# provider_dfs = []
+
+# for file in provider_files:
+#     df = pd.read_csv(file, encoding='ISO-8859-1', low_memory=False)
+#     year = int(os.path.basename(file).split("_")[1].split(".")[0])
+#     df['year'] = year
+
+#     # ✅ Use exact casing: "Federal Provider Number"
+#     if "Federal Provider Number" in df.columns:
+#         df['Federal Provider Number'] = df['Federal Provider Number'].astype(str).str.zfill(6)
+#         df = df.rename(columns={"Federal Provider Number": "provider_ccn"})
+#         provider_dfs.append(df[['provider_ccn', 'year', 'staffing_rating', 'rn_staffing_rating']])
+#     else:
+#         print(f"⚠️ Skipping {file}: 'Federal Provider Number' column not found.")
+
+# provider_df = pd.concat(provider_dfs, ignore_index=True)
+
+# # Step 3: Merge cost and provider info on provider_ccn + year
+# merged_df = pd.merge(
+#     cost_df,
+#     provider_df,
+#     on=['provider_ccn', 'year'],
+#     how='inner'
+# )
+
+# # Step 4: Compute Occupancy Rate
+# merged_df['occupancy_rate'] = merged_df['total_days_total'] / merged_df['total_bed_days_available']
+
+# # Step 5: Estimate bedcert if needed
+# if 'bedcert' not in merged_df.columns:
+#     if 'number_of_beds' in merged_df.columns:
+#         merged_df['bedcert'] = merged_df['number_of_beds']
+#     elif 'total_bed_days_available' in merged_df.columns:
+#         merged_df['bedcert'] = merged_df['total_bed_days_available'] / 365
+#     else:
+#         raise ValueError("❌ Could not compute 'bedcert': missing both 'number_of_beds' and 'total_bed_days_available'")
+
+
+# # Step 6: Define features and target
+# features = [
+#     'occupancy_rate',
+#     'staffing_rating',
+#     'rn_staffing_rating',
+#     'total_liabilities',
+#     'total_salaries_from_worksheet_a',
+#     'bedcert'
+# ]
+# target = 'net_income'
+
+# # Step 7: Clean and fit model
+# for col in features + [target]:
+#     merged_df[col] = pd.to_numeric(merged_df[col], errors='coerce')
+
+# data = merged_df.dropna(subset=features + [target])
+# X = sm.add_constant(data[features])
+# y = data[target]
+
+# model = sm.OLS(y, X).fit()
+
+# # Step 8: Show regression summary
+# print(model.summary())
+
+#######################################
+# Regression Analysis with all years combined
+# This code assumes you have already cleaned the CostReport and ProviderInfo files
+
+# import pandas as pd
+# import statsmodels.api as sm
+# import glob
+# import os
+
+# # Step 1: Load all cleaned CostReport CSVs (2015–2021)
+# cost_files = {
+#     "2015": "2015_CostReport_cleaned.csv",
+#     "2016": "2016_CostReport_cleaned.csv",
+#     "2017": "2017_CostReport_cleaned.csv",
+#     "2018": "2018_CostReport_cleaned.csv",
+#     "2019": "2019_CostReport_cleaned.csv",
+#     "2020": "2020_CostReport_cleaned.csv",
+#     "2021": "2021_CostReport_cleaned.csv"
+# }
+
+# cost_dfs = []
+# for year, path in cost_files.items():
+#     df = pd.read_csv(path, low_memory=False)
+#     df['year'] = int(year)
+#     df['provider_ccn'] = df['provider_ccn'].astype(str).str.zfill(6)
+#     cost_dfs.append(df)
+
+# cost_df = pd.concat(cost_dfs, ignore_index=True)
+
+# # Step 2: Load ProviderInfo files
+# provider_files = glob.glob("ProviderInfo_20*.csv")
+# provider_dfs = []
+
+# for file in provider_files:
+#     df = pd.read_csv(file, encoding='ISO-8859-1', low_memory=False)
+#     year = int(os.path.basename(file).split("_")[1].split(".")[0])
+#     df['year'] = year
+
+#     # Use exact casing: "Federal Provider Number"
+#     if "Federal Provider Number" in df.columns:
+#         df['Federal Provider Number'] = df['Federal Provider Number'].astype(str).str.zfill(6)
+#         df = df.rename(columns={"Federal Provider Number": "provider_ccn"})
+#         provider_dfs.append(df[['provider_ccn', 'year', 'staffing_rating', 'rn_staffing_rating']])
+#     else:
+#         print(f"⚠️ Skipping {file}: 'Federal Provider Number' column not found.")
+
+# provider_df = pd.concat(provider_dfs, ignore_index=True)
+
+# # Step 3: Merge cost and provider info on provider_ccn + year
+# merged_df = pd.merge(
+#     cost_df,
+#     provider_df,
+#     on=['provider_ccn', 'year'],
+#     how='inner'
+# )
+
+# # Step 4: Compute Occupancy Rate
+# merged_df['occupancy_rate'] = merged_df['total_days_total'] / merged_df['total_bed_days_available']
+
+# # Step 5: Estimate bedcert if needed
+# if 'bedcert' not in merged_df.columns:
+#     if 'number_of_beds' in merged_df.columns:
+#         merged_df['bedcert'] = merged_df['number_of_beds']
+#     elif 'total_bed_days_available' in merged_df.columns:
+#         merged_df['bedcert'] = merged_df['total_bed_days_available'] / 365
+#     else:
+#         raise ValueError("❌ Could not compute 'bedcert': missing both 'number_of_beds' and 'total_bed_days_available'")
+
+# # Step 6: Define features and target (updated feature name here)
+# features = [
+#     'occupancy_rate',
+#     'staffing_rating',
+#     'rn_staffing_rating',
+#     'total_liabilities',
+#     'total_salaries_adjusted',  # <- updated here
+#     'bedcert'
+# ]
+# target = 'net_income'
+
+# # Step 7: Clean and fit model
+# for col in features + [target]:
+#     merged_df[col] = pd.to_numeric(merged_df[col], errors='coerce')
+
+# data = merged_df.dropna(subset=features + [target])
+# X = sm.add_constant(data[features])
+# y = data[target]
+
+# model = sm.OLS(y, X).fit()
+
+# # Step 8: Show regression summary
+# print(model.summary())
+
+
+
+# from sklearn.ensemble import RandomForestRegressor
+# from sklearn.metrics import r2_score, mean_squared_error
+# import numpy as np
+
+# # Step 1: Train the model
+# rf = RandomForestRegressor(n_estimators=100, random_state=42)
+# rf.fit(X, y)
+
+# # Step 2: Predict
+# y_pred = rf.predict(X)
+
+# # Step 3: Evaluate performance
+# r2 = r2_score(y, y_pred)
+# rmse = np.sqrt(mean_squared_error(y, y_pred))
+
+# print(f"\n🌲 Random Forest Regressor Results:")
+# print(f"R² Score: {r2:.3f}")
+# print(f"RMSE: {rmse:,.2f}")
+
+# # Step 4: Feature Importance
+# import matplotlib.pyplot as plt
+
+# importances = rf.feature_importances_
+# indices = np.argsort(importances)[::-1]
+# features_sorted = X.columns[indices]
+
+# plt.figure(figsize=(8, 6))
+# plt.title("Feature Importance (Random Forest)")
+# plt.barh(features_sorted, importances[indices], color="skyblue")
+# plt.xlabel("Relative Importance")
+# plt.gca().invert_yaxis()
+# plt.tight_layout()
+# plt.show()
+
+
+
+######################
+
+# import pandas as pd
+# import numpy as np
+# import os
+# import glob
+# from sklearn.model_selection import train_test_split
+# from sklearn.metrics import r2_score, mean_squared_error
+# import matplotlib.pyplot as plt
+# from lightgbm import LGBMRegressor, plot_importance
+
+# # Step 1: Load all cleaned CostReport CSVs (2015–2021)
+# cost_files = {
+#     "2015": "2015_CostReport_cleaned.csv",
+#     "2016": "2016_CostReport_cleaned.csv",
+#     "2017": "2017_CostReport_cleaned.csv",
+#     "2018": "2018_CostReport_cleaned.csv",
+#     "2019": "2019_CostReport_cleaned.csv",
+#     "2020": "2020_CostReport_cleaned.csv",
+#     "2021": "2021_CostReport_cleaned.csv"
+# }
+
+# all_dataframes = []
+# for year, path in cost_files.items():
+#     df = pd.read_csv(path, low_memory=False)
+#     df['year'] = int(year)
+#     all_dataframes.append(df)
+
+# # Combine all years into one DataFrame
+# merged_df = pd.concat(all_dataframes, ignore_index=True)
+
+# # Step 2: Define features and target
+# features = [
+#     'occupancy_rate',
+#     'staffing_rating',
+#     'rn_staffing_rating',
+#     'total_liabilities',
+#     'total_salaries_adjusted',
+#     'bedcert'
+# ]
+# target = 'net_income'
+
+# # Step 3: Ensure columns are numeric
+# for col in features + [target]:
+#     merged_df[col] = pd.to_numeric(merged_df[col], errors='coerce')
+
+# # Step 4: Clean the dataset
+# data = merged_df.dropna(subset=features + [target])
+# X = data[features]
+# y = data[target]
+
+# # Step 5: Split into train/test sets
+# X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+
+# # Step 6: Train the LightGBM model
+# model = LGBMRegressor(n_estimators=100, random_state=42)
+# model.fit(X_train, y_train)
+
+# # Step 7: Evaluate the model
+# y_pred = model.predict(X_test)
+# r2 = r2_score(y_test, y_pred)
+# rmse = np.sqrt(mean_squared_error(y_test, y_pred))
+
+# print("\n🌿 LightGBM Regression Results:")
+# print(f"R² Score: {r2:.4f}")
+# print(f"RMSE: ${rmse:,.2f}")
+
+# # Step 8: Plot feature importance
+# plot_importance(model, title='LightGBM Feature Importance', xlabel='F Score')
+# plt.tight_layout()
+# plt.show()
