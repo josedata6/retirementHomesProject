@@ -925,3 +925,110 @@ print(f"R^2 Score: {r2:.4f}")
 # plt.ylabel("Predicted Values")
 # plt.title("XGBoost (XGBRegressor): Actual vs Predicted")
 # plt.show()
+
+#######################################
+#####
+### Random Forest Regression Analysis ######
+
+import pandas as pd
+import numpy as np
+from sklearn.ensemble import RandomForestRegressor
+from sklearn.model_selection import train_test_split
+from sklearn.metrics import r2_score, mean_squared_error
+import matplotlib.pyplot as plt
+
+# Load merged dataset
+df = pd.read_csv("Merged_2015_Data.csv")
+
+# Clean target variable
+df["WEIGHTED_ALL_CYCLES_SCORE"] = pd.to_numeric(df["WEIGHTED_ALL_CYCLES_SCORE"], errors="coerce")
+df = df.dropna(subset=["WEIGHTED_ALL_CYCLES_SCORE"])
+
+# Define features
+features = [
+    "incident_cnt", "cmplnt_cnt", "FINE_TOT", "TOT_PENLTY_CNT",
+    "deficiency_count", "total_fines", "total_payden_days",
+    "avg_quality_measure", "total_fund_balances", "total_liabilities", "total_other_assets"
+]
+df = df.dropna(subset=features)
+X = df[features]
+y = df["WEIGHTED_ALL_CYCLES_SCORE"]
+
+# Train/test split
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+
+# Train model
+model = RandomForestRegressor(random_state=42)
+model.fit(X_train, y_train)
+
+# Predict and evaluate
+y_pred = model.predict(X_test)
+r2 = r2_score(y_test, y_pred)
+rmse = np.sqrt(mean_squared_error(y_test, y_pred))
+
+# Output results
+print(f"R²: {r2:.3f}, RMSE: {rmse:.2f}")
+
+# Plot feature importances
+importances = pd.Series(model.feature_importances_, index=features)
+importances.sort_values().plot(kind="barh", figsize=(10, 6), title="Feature Importance (2015)")
+plt.tight_layout()
+plt.show()
+
+#############################
+##### Data Merging and Exporting #####
+# Importing required libraries
+
+import pandas as pd
+
+# Load CSV files from your local directory
+provider_df = pd.read_csv("Cleaned_ProviderInfo_2015.csv", dtype={"provnum": str})
+cost_df = pd.read_csv("2015_CostReport_cleaned.csv", dtype={"provider_ccn": str})
+deficiency_df = pd.read_csv("HealthDeficiencies_2015.csv", encoding="latin1", dtype={"provnum": str})
+penalty_df = pd.read_csv("Penalties_2015_Clean.csv", dtype={"provnum": str})
+quality_df = pd.read_csv("QualityMsrMDS_2015_Cleaned.csv", dtype={"provnum": str})
+
+# Standardize provider ID format
+provider_df["provnum"] = provider_df["provnum"].str.zfill(6)
+cost_df["provider_ccn"] = cost_df["provider_ccn"].str.zfill(6)
+deficiency_df["provnum"] = deficiency_df["provnum"].str.zfill(6)
+penalty_df["provnum"] = penalty_df["provnum"].str.zfill(6)
+quality_df["provnum"] = quality_df["provnum"].str.zfill(6)
+
+# Aggregate deficiency counts
+deficiency_counts = deficiency_df.groupby("provnum").size().reset_index(name="deficiency_count")
+
+# Summarize penalties
+penalty_summary = penalty_df.groupby("provnum").agg({
+    "fine_amt": "sum",
+    "payden_days": "sum"
+}).reset_index().rename(columns={"fine_amt": "total_fines", "payden_days": "total_payden_days"})
+
+# Average quality measure
+quality_scores = quality_df.groupby("provnum").agg({
+    "measure_score_3qtr_avg": "mean"
+}).reset_index().rename(columns={"measure_score_3qtr_avg": "avg_quality_measure"})
+
+# Select cost variables
+cost_financials = cost_df[[
+    "provider_ccn", "total_fund_balances", "total_liabilities", "total_other_assets"
+]].rename(columns={"provider_ccn": "provnum"})
+
+# Merge all data
+merged_df = provider_df[[
+    "provnum", "WEIGHTED_ALL_CYCLES_SCORE", "incident_cnt", "cmplnt_cnt", "FINE_TOT", "TOT_PENLTY_CNT"
+]].copy()
+
+merged_df = merged_df.merge(deficiency_counts, on="provnum", how="left")
+merged_df = merged_df.merge(penalty_summary, on="provnum", how="left")
+merged_df = merged_df.merge(quality_scores, on="provnum", how="left")
+merged_df = merged_df.merge(cost_financials, on="provnum", how="left")
+
+# Convert score to numeric
+merged_df["WEIGHTED_ALL_CYCLES_SCORE"] = pd.to_numeric(merged_df["WEIGHTED_ALL_CYCLES_SCORE"], errors='coerce')
+
+# Export to local CSV
+merged_df.to_csv("Merged_2015_Data.csv", index=False)
+
+
+

@@ -93,6 +93,14 @@
         "documentation": {}
     },
     {
+        "label": "train_test_split",
+        "importPath": "sklearn.model_selection",
+        "description": "sklearn.model_selection",
+        "isExtraImport": true,
+        "detail": "sklearn.model_selection",
+        "documentation": {}
+    },
+    {
         "label": "StandardScaler",
         "importPath": "sklearn.preprocessing",
         "description": "sklearn.preprocessing",
@@ -158,6 +166,22 @@
     },
     {
         "label": "r2_score",
+        "importPath": "sklearn.metrics",
+        "description": "sklearn.metrics",
+        "isExtraImport": true,
+        "detail": "sklearn.metrics",
+        "documentation": {}
+    },
+    {
+        "label": "r2_score",
+        "importPath": "sklearn.metrics",
+        "description": "sklearn.metrics",
+        "isExtraImport": true,
+        "detail": "sklearn.metrics",
+        "documentation": {}
+    },
+    {
+        "label": "mean_squared_error",
         "importPath": "sklearn.metrics",
         "description": "sklearn.metrics",
         "isExtraImport": true,
@@ -197,6 +221,14 @@
         "description": "folium.plugins",
         "isExtraImport": true,
         "detail": "folium.plugins",
+        "documentation": {}
+    },
+    {
+        "label": "RandomForestRegressor",
+        "importPath": "sklearn.ensemble",
+        "description": "sklearn.ensemble",
+        "isExtraImport": true,
+        "detail": "sklearn.ensemble",
         "documentation": {}
     },
     {
@@ -718,6 +750,294 @@
         "importPath": "project",
         "description": "project",
         "peekOfCode": "rmse = np.sqrt(mse)  # root mean squared error\n# Print evaluation results\nprint(f\"\\nFinal RMSE on Test Set: {rmse:.2f}\")\nprint(f\"Mean Squared Error: {mse:.4f}\")\nprint(f\"R^2 Score: {r2:.4f}\")\n# # Feature importance visualization (currently commented out)\n# feature_importance = model.feature_importances_\n# sorted_idx = np.argsort(feature_importance)[::-1]\n# plt.figure(figsize=(10, 6))\n# plt.barh(np.array(X.columns)[sorted_idx], feature_importance[sorted_idx])",
+        "detail": "project",
+        "documentation": {}
+    },
+    {
+        "label": "df",
+        "kind": 5,
+        "importPath": "project",
+        "description": "project",
+        "peekOfCode": "df = pd.read_csv(\"Merged_2015_Data.csv\")\n# Clean target variable\ndf[\"WEIGHTED_ALL_CYCLES_SCORE\"] = pd.to_numeric(df[\"WEIGHTED_ALL_CYCLES_SCORE\"], errors=\"coerce\")\ndf = df.dropna(subset=[\"WEIGHTED_ALL_CYCLES_SCORE\"])\n# Define features\nfeatures = [\n    \"incident_cnt\", \"cmplnt_cnt\", \"FINE_TOT\", \"TOT_PENLTY_CNT\",\n    \"deficiency_count\", \"total_fines\", \"total_payden_days\",\n    \"avg_quality_measure\", \"total_fund_balances\", \"total_liabilities\", \"total_other_assets\"\n]",
+        "detail": "project",
+        "documentation": {}
+    },
+    {
+        "label": "df[\"WEIGHTED_ALL_CYCLES_SCORE\"]",
+        "kind": 5,
+        "importPath": "project",
+        "description": "project",
+        "peekOfCode": "df[\"WEIGHTED_ALL_CYCLES_SCORE\"] = pd.to_numeric(df[\"WEIGHTED_ALL_CYCLES_SCORE\"], errors=\"coerce\")\ndf = df.dropna(subset=[\"WEIGHTED_ALL_CYCLES_SCORE\"])\n# Define features\nfeatures = [\n    \"incident_cnt\", \"cmplnt_cnt\", \"FINE_TOT\", \"TOT_PENLTY_CNT\",\n    \"deficiency_count\", \"total_fines\", \"total_payden_days\",\n    \"avg_quality_measure\", \"total_fund_balances\", \"total_liabilities\", \"total_other_assets\"\n]\ndf = df.dropna(subset=features)\nX = df[features]",
+        "detail": "project",
+        "documentation": {}
+    },
+    {
+        "label": "df",
+        "kind": 5,
+        "importPath": "project",
+        "description": "project",
+        "peekOfCode": "df = df.dropna(subset=[\"WEIGHTED_ALL_CYCLES_SCORE\"])\n# Define features\nfeatures = [\n    \"incident_cnt\", \"cmplnt_cnt\", \"FINE_TOT\", \"TOT_PENLTY_CNT\",\n    \"deficiency_count\", \"total_fines\", \"total_payden_days\",\n    \"avg_quality_measure\", \"total_fund_balances\", \"total_liabilities\", \"total_other_assets\"\n]\ndf = df.dropna(subset=features)\nX = df[features]\ny = df[\"WEIGHTED_ALL_CYCLES_SCORE\"]",
+        "detail": "project",
+        "documentation": {}
+    },
+    {
+        "label": "features",
+        "kind": 5,
+        "importPath": "project",
+        "description": "project",
+        "peekOfCode": "features = [\n    \"incident_cnt\", \"cmplnt_cnt\", \"FINE_TOT\", \"TOT_PENLTY_CNT\",\n    \"deficiency_count\", \"total_fines\", \"total_payden_days\",\n    \"avg_quality_measure\", \"total_fund_balances\", \"total_liabilities\", \"total_other_assets\"\n]\ndf = df.dropna(subset=features)\nX = df[features]\ny = df[\"WEIGHTED_ALL_CYCLES_SCORE\"]\n# Train/test split\nX_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)",
+        "detail": "project",
+        "documentation": {}
+    },
+    {
+        "label": "df",
+        "kind": 5,
+        "importPath": "project",
+        "description": "project",
+        "peekOfCode": "df = df.dropna(subset=features)\nX = df[features]\ny = df[\"WEIGHTED_ALL_CYCLES_SCORE\"]\n# Train/test split\nX_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)\n# Train model\nmodel = RandomForestRegressor(random_state=42)\nmodel.fit(X_train, y_train)\n# Predict and evaluate\ny_pred = model.predict(X_test)",
+        "detail": "project",
+        "documentation": {}
+    },
+    {
+        "label": "X",
+        "kind": 5,
+        "importPath": "project",
+        "description": "project",
+        "peekOfCode": "X = df[features]\ny = df[\"WEIGHTED_ALL_CYCLES_SCORE\"]\n# Train/test split\nX_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)\n# Train model\nmodel = RandomForestRegressor(random_state=42)\nmodel.fit(X_train, y_train)\n# Predict and evaluate\ny_pred = model.predict(X_test)\nr2 = r2_score(y_test, y_pred)",
+        "detail": "project",
+        "documentation": {}
+    },
+    {
+        "label": "y",
+        "kind": 5,
+        "importPath": "project",
+        "description": "project",
+        "peekOfCode": "y = df[\"WEIGHTED_ALL_CYCLES_SCORE\"]\n# Train/test split\nX_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)\n# Train model\nmodel = RandomForestRegressor(random_state=42)\nmodel.fit(X_train, y_train)\n# Predict and evaluate\ny_pred = model.predict(X_test)\nr2 = r2_score(y_test, y_pred)\nrmse = np.sqrt(mean_squared_error(y_test, y_pred))",
+        "detail": "project",
+        "documentation": {}
+    },
+    {
+        "label": "model",
+        "kind": 5,
+        "importPath": "project",
+        "description": "project",
+        "peekOfCode": "model = RandomForestRegressor(random_state=42)\nmodel.fit(X_train, y_train)\n# Predict and evaluate\ny_pred = model.predict(X_test)\nr2 = r2_score(y_test, y_pred)\nrmse = np.sqrt(mean_squared_error(y_test, y_pred))\n# Output results\nprint(f\"R²: {r2:.3f}, RMSE: {rmse:.2f}\")\n# Plot feature importances\nimportances = pd.Series(model.feature_importances_, index=features)",
+        "detail": "project",
+        "documentation": {}
+    },
+    {
+        "label": "y_pred",
+        "kind": 5,
+        "importPath": "project",
+        "description": "project",
+        "peekOfCode": "y_pred = model.predict(X_test)\nr2 = r2_score(y_test, y_pred)\nrmse = np.sqrt(mean_squared_error(y_test, y_pred))\n# Output results\nprint(f\"R²: {r2:.3f}, RMSE: {rmse:.2f}\")\n# Plot feature importances\nimportances = pd.Series(model.feature_importances_, index=features)\nimportances.sort_values().plot(kind=\"barh\", figsize=(10, 6), title=\"Feature Importance (2015)\")\nplt.tight_layout()\nplt.show()",
+        "detail": "project",
+        "documentation": {}
+    },
+    {
+        "label": "r2",
+        "kind": 5,
+        "importPath": "project",
+        "description": "project",
+        "peekOfCode": "r2 = r2_score(y_test, y_pred)\nrmse = np.sqrt(mean_squared_error(y_test, y_pred))\n# Output results\nprint(f\"R²: {r2:.3f}, RMSE: {rmse:.2f}\")\n# Plot feature importances\nimportances = pd.Series(model.feature_importances_, index=features)\nimportances.sort_values().plot(kind=\"barh\", figsize=(10, 6), title=\"Feature Importance (2015)\")\nplt.tight_layout()\nplt.show()\n#############################",
+        "detail": "project",
+        "documentation": {}
+    },
+    {
+        "label": "rmse",
+        "kind": 5,
+        "importPath": "project",
+        "description": "project",
+        "peekOfCode": "rmse = np.sqrt(mean_squared_error(y_test, y_pred))\n# Output results\nprint(f\"R²: {r2:.3f}, RMSE: {rmse:.2f}\")\n# Plot feature importances\nimportances = pd.Series(model.feature_importances_, index=features)\nimportances.sort_values().plot(kind=\"barh\", figsize=(10, 6), title=\"Feature Importance (2015)\")\nplt.tight_layout()\nplt.show()\n#############################\n##### Data Merging and Exporting #####",
+        "detail": "project",
+        "documentation": {}
+    },
+    {
+        "label": "importances",
+        "kind": 5,
+        "importPath": "project",
+        "description": "project",
+        "peekOfCode": "importances = pd.Series(model.feature_importances_, index=features)\nimportances.sort_values().plot(kind=\"barh\", figsize=(10, 6), title=\"Feature Importance (2015)\")\nplt.tight_layout()\nplt.show()\n#############################\n##### Data Merging and Exporting #####\n# Importing required libraries\nimport pandas as pd\n# Load CSV files from your local directory\nprovider_df = pd.read_csv(\"Cleaned_ProviderInfo_2015.csv\", dtype={\"provnum\": str})",
+        "detail": "project",
+        "documentation": {}
+    },
+    {
+        "label": "provider_df",
+        "kind": 5,
+        "importPath": "project",
+        "description": "project",
+        "peekOfCode": "provider_df = pd.read_csv(\"Cleaned_ProviderInfo_2015.csv\", dtype={\"provnum\": str})\ncost_df = pd.read_csv(\"2015_CostReport_cleaned.csv\", dtype={\"provider_ccn\": str})\ndeficiency_df = pd.read_csv(\"HealthDeficiencies_2015.csv\", encoding=\"latin1\", dtype={\"provnum\": str})\npenalty_df = pd.read_csv(\"Penalties_2015_Clean.csv\", dtype={\"provnum\": str})\nquality_df = pd.read_csv(\"QualityMsrMDS_2015_Cleaned.csv\", dtype={\"provnum\": str})\n# Standardize provider ID format\nprovider_df[\"provnum\"] = provider_df[\"provnum\"].str.zfill(6)\ncost_df[\"provider_ccn\"] = cost_df[\"provider_ccn\"].str.zfill(6)\ndeficiency_df[\"provnum\"] = deficiency_df[\"provnum\"].str.zfill(6)\npenalty_df[\"provnum\"] = penalty_df[\"provnum\"].str.zfill(6)",
+        "detail": "project",
+        "documentation": {}
+    },
+    {
+        "label": "cost_df",
+        "kind": 5,
+        "importPath": "project",
+        "description": "project",
+        "peekOfCode": "cost_df = pd.read_csv(\"2015_CostReport_cleaned.csv\", dtype={\"provider_ccn\": str})\ndeficiency_df = pd.read_csv(\"HealthDeficiencies_2015.csv\", encoding=\"latin1\", dtype={\"provnum\": str})\npenalty_df = pd.read_csv(\"Penalties_2015_Clean.csv\", dtype={\"provnum\": str})\nquality_df = pd.read_csv(\"QualityMsrMDS_2015_Cleaned.csv\", dtype={\"provnum\": str})\n# Standardize provider ID format\nprovider_df[\"provnum\"] = provider_df[\"provnum\"].str.zfill(6)\ncost_df[\"provider_ccn\"] = cost_df[\"provider_ccn\"].str.zfill(6)\ndeficiency_df[\"provnum\"] = deficiency_df[\"provnum\"].str.zfill(6)\npenalty_df[\"provnum\"] = penalty_df[\"provnum\"].str.zfill(6)\nquality_df[\"provnum\"] = quality_df[\"provnum\"].str.zfill(6)",
+        "detail": "project",
+        "documentation": {}
+    },
+    {
+        "label": "deficiency_df",
+        "kind": 5,
+        "importPath": "project",
+        "description": "project",
+        "peekOfCode": "deficiency_df = pd.read_csv(\"HealthDeficiencies_2015.csv\", encoding=\"latin1\", dtype={\"provnum\": str})\npenalty_df = pd.read_csv(\"Penalties_2015_Clean.csv\", dtype={\"provnum\": str})\nquality_df = pd.read_csv(\"QualityMsrMDS_2015_Cleaned.csv\", dtype={\"provnum\": str})\n# Standardize provider ID format\nprovider_df[\"provnum\"] = provider_df[\"provnum\"].str.zfill(6)\ncost_df[\"provider_ccn\"] = cost_df[\"provider_ccn\"].str.zfill(6)\ndeficiency_df[\"provnum\"] = deficiency_df[\"provnum\"].str.zfill(6)\npenalty_df[\"provnum\"] = penalty_df[\"provnum\"].str.zfill(6)\nquality_df[\"provnum\"] = quality_df[\"provnum\"].str.zfill(6)\n# Aggregate deficiency counts",
+        "detail": "project",
+        "documentation": {}
+    },
+    {
+        "label": "penalty_df",
+        "kind": 5,
+        "importPath": "project",
+        "description": "project",
+        "peekOfCode": "penalty_df = pd.read_csv(\"Penalties_2015_Clean.csv\", dtype={\"provnum\": str})\nquality_df = pd.read_csv(\"QualityMsrMDS_2015_Cleaned.csv\", dtype={\"provnum\": str})\n# Standardize provider ID format\nprovider_df[\"provnum\"] = provider_df[\"provnum\"].str.zfill(6)\ncost_df[\"provider_ccn\"] = cost_df[\"provider_ccn\"].str.zfill(6)\ndeficiency_df[\"provnum\"] = deficiency_df[\"provnum\"].str.zfill(6)\npenalty_df[\"provnum\"] = penalty_df[\"provnum\"].str.zfill(6)\nquality_df[\"provnum\"] = quality_df[\"provnum\"].str.zfill(6)\n# Aggregate deficiency counts\ndeficiency_counts = deficiency_df.groupby(\"provnum\").size().reset_index(name=\"deficiency_count\")",
+        "detail": "project",
+        "documentation": {}
+    },
+    {
+        "label": "quality_df",
+        "kind": 5,
+        "importPath": "project",
+        "description": "project",
+        "peekOfCode": "quality_df = pd.read_csv(\"QualityMsrMDS_2015_Cleaned.csv\", dtype={\"provnum\": str})\n# Standardize provider ID format\nprovider_df[\"provnum\"] = provider_df[\"provnum\"].str.zfill(6)\ncost_df[\"provider_ccn\"] = cost_df[\"provider_ccn\"].str.zfill(6)\ndeficiency_df[\"provnum\"] = deficiency_df[\"provnum\"].str.zfill(6)\npenalty_df[\"provnum\"] = penalty_df[\"provnum\"].str.zfill(6)\nquality_df[\"provnum\"] = quality_df[\"provnum\"].str.zfill(6)\n# Aggregate deficiency counts\ndeficiency_counts = deficiency_df.groupby(\"provnum\").size().reset_index(name=\"deficiency_count\")\n# Summarize penalties",
+        "detail": "project",
+        "documentation": {}
+    },
+    {
+        "label": "provider_df[\"provnum\"]",
+        "kind": 5,
+        "importPath": "project",
+        "description": "project",
+        "peekOfCode": "provider_df[\"provnum\"] = provider_df[\"provnum\"].str.zfill(6)\ncost_df[\"provider_ccn\"] = cost_df[\"provider_ccn\"].str.zfill(6)\ndeficiency_df[\"provnum\"] = deficiency_df[\"provnum\"].str.zfill(6)\npenalty_df[\"provnum\"] = penalty_df[\"provnum\"].str.zfill(6)\nquality_df[\"provnum\"] = quality_df[\"provnum\"].str.zfill(6)\n# Aggregate deficiency counts\ndeficiency_counts = deficiency_df.groupby(\"provnum\").size().reset_index(name=\"deficiency_count\")\n# Summarize penalties\npenalty_summary = penalty_df.groupby(\"provnum\").agg({\n    \"fine_amt\": \"sum\",",
+        "detail": "project",
+        "documentation": {}
+    },
+    {
+        "label": "cost_df[\"provider_ccn\"]",
+        "kind": 5,
+        "importPath": "project",
+        "description": "project",
+        "peekOfCode": "cost_df[\"provider_ccn\"] = cost_df[\"provider_ccn\"].str.zfill(6)\ndeficiency_df[\"provnum\"] = deficiency_df[\"provnum\"].str.zfill(6)\npenalty_df[\"provnum\"] = penalty_df[\"provnum\"].str.zfill(6)\nquality_df[\"provnum\"] = quality_df[\"provnum\"].str.zfill(6)\n# Aggregate deficiency counts\ndeficiency_counts = deficiency_df.groupby(\"provnum\").size().reset_index(name=\"deficiency_count\")\n# Summarize penalties\npenalty_summary = penalty_df.groupby(\"provnum\").agg({\n    \"fine_amt\": \"sum\",\n    \"payden_days\": \"sum\"",
+        "detail": "project",
+        "documentation": {}
+    },
+    {
+        "label": "deficiency_df[\"provnum\"]",
+        "kind": 5,
+        "importPath": "project",
+        "description": "project",
+        "peekOfCode": "deficiency_df[\"provnum\"] = deficiency_df[\"provnum\"].str.zfill(6)\npenalty_df[\"provnum\"] = penalty_df[\"provnum\"].str.zfill(6)\nquality_df[\"provnum\"] = quality_df[\"provnum\"].str.zfill(6)\n# Aggregate deficiency counts\ndeficiency_counts = deficiency_df.groupby(\"provnum\").size().reset_index(name=\"deficiency_count\")\n# Summarize penalties\npenalty_summary = penalty_df.groupby(\"provnum\").agg({\n    \"fine_amt\": \"sum\",\n    \"payden_days\": \"sum\"\n}).reset_index().rename(columns={\"fine_amt\": \"total_fines\", \"payden_days\": \"total_payden_days\"})",
+        "detail": "project",
+        "documentation": {}
+    },
+    {
+        "label": "penalty_df[\"provnum\"]",
+        "kind": 5,
+        "importPath": "project",
+        "description": "project",
+        "peekOfCode": "penalty_df[\"provnum\"] = penalty_df[\"provnum\"].str.zfill(6)\nquality_df[\"provnum\"] = quality_df[\"provnum\"].str.zfill(6)\n# Aggregate deficiency counts\ndeficiency_counts = deficiency_df.groupby(\"provnum\").size().reset_index(name=\"deficiency_count\")\n# Summarize penalties\npenalty_summary = penalty_df.groupby(\"provnum\").agg({\n    \"fine_amt\": \"sum\",\n    \"payden_days\": \"sum\"\n}).reset_index().rename(columns={\"fine_amt\": \"total_fines\", \"payden_days\": \"total_payden_days\"})\n# Average quality measure",
+        "detail": "project",
+        "documentation": {}
+    },
+    {
+        "label": "quality_df[\"provnum\"]",
+        "kind": 5,
+        "importPath": "project",
+        "description": "project",
+        "peekOfCode": "quality_df[\"provnum\"] = quality_df[\"provnum\"].str.zfill(6)\n# Aggregate deficiency counts\ndeficiency_counts = deficiency_df.groupby(\"provnum\").size().reset_index(name=\"deficiency_count\")\n# Summarize penalties\npenalty_summary = penalty_df.groupby(\"provnum\").agg({\n    \"fine_amt\": \"sum\",\n    \"payden_days\": \"sum\"\n}).reset_index().rename(columns={\"fine_amt\": \"total_fines\", \"payden_days\": \"total_payden_days\"})\n# Average quality measure\nquality_scores = quality_df.groupby(\"provnum\").agg({",
+        "detail": "project",
+        "documentation": {}
+    },
+    {
+        "label": "deficiency_counts",
+        "kind": 5,
+        "importPath": "project",
+        "description": "project",
+        "peekOfCode": "deficiency_counts = deficiency_df.groupby(\"provnum\").size().reset_index(name=\"deficiency_count\")\n# Summarize penalties\npenalty_summary = penalty_df.groupby(\"provnum\").agg({\n    \"fine_amt\": \"sum\",\n    \"payden_days\": \"sum\"\n}).reset_index().rename(columns={\"fine_amt\": \"total_fines\", \"payden_days\": \"total_payden_days\"})\n# Average quality measure\nquality_scores = quality_df.groupby(\"provnum\").agg({\n    \"measure_score_3qtr_avg\": \"mean\"\n}).reset_index().rename(columns={\"measure_score_3qtr_avg\": \"avg_quality_measure\"})",
+        "detail": "project",
+        "documentation": {}
+    },
+    {
+        "label": "penalty_summary",
+        "kind": 5,
+        "importPath": "project",
+        "description": "project",
+        "peekOfCode": "penalty_summary = penalty_df.groupby(\"provnum\").agg({\n    \"fine_amt\": \"sum\",\n    \"payden_days\": \"sum\"\n}).reset_index().rename(columns={\"fine_amt\": \"total_fines\", \"payden_days\": \"total_payden_days\"})\n# Average quality measure\nquality_scores = quality_df.groupby(\"provnum\").agg({\n    \"measure_score_3qtr_avg\": \"mean\"\n}).reset_index().rename(columns={\"measure_score_3qtr_avg\": \"avg_quality_measure\"})\n# Select cost variables\ncost_financials = cost_df[[",
+        "detail": "project",
+        "documentation": {}
+    },
+    {
+        "label": "quality_scores",
+        "kind": 5,
+        "importPath": "project",
+        "description": "project",
+        "peekOfCode": "quality_scores = quality_df.groupby(\"provnum\").agg({\n    \"measure_score_3qtr_avg\": \"mean\"\n}).reset_index().rename(columns={\"measure_score_3qtr_avg\": \"avg_quality_measure\"})\n# Select cost variables\ncost_financials = cost_df[[\n    \"provider_ccn\", \"total_fund_balances\", \"total_liabilities\", \"total_other_assets\"\n]].rename(columns={\"provider_ccn\": \"provnum\"})\n# Merge all data\nmerged_df = provider_df[[\n    \"provnum\", \"WEIGHTED_ALL_CYCLES_SCORE\", \"incident_cnt\", \"cmplnt_cnt\", \"FINE_TOT\", \"TOT_PENLTY_CNT\"",
+        "detail": "project",
+        "documentation": {}
+    },
+    {
+        "label": "cost_financials",
+        "kind": 5,
+        "importPath": "project",
+        "description": "project",
+        "peekOfCode": "cost_financials = cost_df[[\n    \"provider_ccn\", \"total_fund_balances\", \"total_liabilities\", \"total_other_assets\"\n]].rename(columns={\"provider_ccn\": \"provnum\"})\n# Merge all data\nmerged_df = provider_df[[\n    \"provnum\", \"WEIGHTED_ALL_CYCLES_SCORE\", \"incident_cnt\", \"cmplnt_cnt\", \"FINE_TOT\", \"TOT_PENLTY_CNT\"\n]].copy()\nmerged_df = merged_df.merge(deficiency_counts, on=\"provnum\", how=\"left\")\nmerged_df = merged_df.merge(penalty_summary, on=\"provnum\", how=\"left\")\nmerged_df = merged_df.merge(quality_scores, on=\"provnum\", how=\"left\")",
+        "detail": "project",
+        "documentation": {}
+    },
+    {
+        "label": "merged_df",
+        "kind": 5,
+        "importPath": "project",
+        "description": "project",
+        "peekOfCode": "merged_df = provider_df[[\n    \"provnum\", \"WEIGHTED_ALL_CYCLES_SCORE\", \"incident_cnt\", \"cmplnt_cnt\", \"FINE_TOT\", \"TOT_PENLTY_CNT\"\n]].copy()\nmerged_df = merged_df.merge(deficiency_counts, on=\"provnum\", how=\"left\")\nmerged_df = merged_df.merge(penalty_summary, on=\"provnum\", how=\"left\")\nmerged_df = merged_df.merge(quality_scores, on=\"provnum\", how=\"left\")\nmerged_df = merged_df.merge(cost_financials, on=\"provnum\", how=\"left\")\n# Convert score to numeric\nmerged_df[\"WEIGHTED_ALL_CYCLES_SCORE\"] = pd.to_numeric(merged_df[\"WEIGHTED_ALL_CYCLES_SCORE\"], errors='coerce')\n# Export to local CSV",
+        "detail": "project",
+        "documentation": {}
+    },
+    {
+        "label": "merged_df",
+        "kind": 5,
+        "importPath": "project",
+        "description": "project",
+        "peekOfCode": "merged_df = merged_df.merge(deficiency_counts, on=\"provnum\", how=\"left\")\nmerged_df = merged_df.merge(penalty_summary, on=\"provnum\", how=\"left\")\nmerged_df = merged_df.merge(quality_scores, on=\"provnum\", how=\"left\")\nmerged_df = merged_df.merge(cost_financials, on=\"provnum\", how=\"left\")\n# Convert score to numeric\nmerged_df[\"WEIGHTED_ALL_CYCLES_SCORE\"] = pd.to_numeric(merged_df[\"WEIGHTED_ALL_CYCLES_SCORE\"], errors='coerce')\n# Export to local CSV\nmerged_df.to_csv(\"Merged_2015_Data.csv\", index=False)",
+        "detail": "project",
+        "documentation": {}
+    },
+    {
+        "label": "merged_df",
+        "kind": 5,
+        "importPath": "project",
+        "description": "project",
+        "peekOfCode": "merged_df = merged_df.merge(penalty_summary, on=\"provnum\", how=\"left\")\nmerged_df = merged_df.merge(quality_scores, on=\"provnum\", how=\"left\")\nmerged_df = merged_df.merge(cost_financials, on=\"provnum\", how=\"left\")\n# Convert score to numeric\nmerged_df[\"WEIGHTED_ALL_CYCLES_SCORE\"] = pd.to_numeric(merged_df[\"WEIGHTED_ALL_CYCLES_SCORE\"], errors='coerce')\n# Export to local CSV\nmerged_df.to_csv(\"Merged_2015_Data.csv\", index=False)",
+        "detail": "project",
+        "documentation": {}
+    },
+    {
+        "label": "merged_df",
+        "kind": 5,
+        "importPath": "project",
+        "description": "project",
+        "peekOfCode": "merged_df = merged_df.merge(quality_scores, on=\"provnum\", how=\"left\")\nmerged_df = merged_df.merge(cost_financials, on=\"provnum\", how=\"left\")\n# Convert score to numeric\nmerged_df[\"WEIGHTED_ALL_CYCLES_SCORE\"] = pd.to_numeric(merged_df[\"WEIGHTED_ALL_CYCLES_SCORE\"], errors='coerce')\n# Export to local CSV\nmerged_df.to_csv(\"Merged_2015_Data.csv\", index=False)",
+        "detail": "project",
+        "documentation": {}
+    },
+    {
+        "label": "merged_df",
+        "kind": 5,
+        "importPath": "project",
+        "description": "project",
+        "peekOfCode": "merged_df = merged_df.merge(cost_financials, on=\"provnum\", how=\"left\")\n# Convert score to numeric\nmerged_df[\"WEIGHTED_ALL_CYCLES_SCORE\"] = pd.to_numeric(merged_df[\"WEIGHTED_ALL_CYCLES_SCORE\"], errors='coerce')\n# Export to local CSV\nmerged_df.to_csv(\"Merged_2015_Data.csv\", index=False)",
+        "detail": "project",
+        "documentation": {}
+    },
+    {
+        "label": "merged_df[\"WEIGHTED_ALL_CYCLES_SCORE\"]",
+        "kind": 5,
+        "importPath": "project",
+        "description": "project",
+        "peekOfCode": "merged_df[\"WEIGHTED_ALL_CYCLES_SCORE\"] = pd.to_numeric(merged_df[\"WEIGHTED_ALL_CYCLES_SCORE\"], errors='coerce')\n# Export to local CSV\nmerged_df.to_csv(\"Merged_2015_Data.csv\", index=False)",
         "detail": "project",
         "documentation": {}
     }
