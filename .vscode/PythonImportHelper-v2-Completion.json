@@ -268,7 +268,7 @@
         "kind": 2,
         "importPath": "project",
         "description": "project",
-        "peekOfCode": "def load_address_info(filepath):\n    ## reads file and loads it into a DataFrame\n    df = pd.read_csv(filepath, encoding='ISO-8859-1', low_memory=False) \n    df.columns = df.columns.str.strip().str.lower()\n    year = os.path.basename(filepath).split(\"_\")[1]\n    df['year'] = int(year)\n    required_cols = ['address', 'city', 'state', 'zip', 'year']\n    if all(col in df.columns for col in ['address', 'city', 'state', 'zip']):\n        return df[required_cols]\n    else:",
+        "peekOfCode": "def load_address_info(filepath):\n    ## reads file and loads it into a DataFrame\n    df = pd.read_csv(filepath, encoding='ISO-8859-1', low_memory=False) \n    ## Standardize column names\n    df.columns = df.columns.str.strip().str.lower()\n    ### Extract year from filename\n    year = os.path.basename(filepath).split(\"_\")[1]\n    df['year'] = int(year)\n    ### Check for required columns\n    required_cols = ['address', 'city', 'state', 'zip', 'year']",
         "detail": "project",
         "documentation": {}
     },
@@ -286,7 +286,7 @@
         "kind": 5,
         "importPath": "project",
         "description": "project",
-        "peekOfCode": "files = glob.glob(\"QualityMsrMDS_20*_Cleaned.csv\")\n## Function to load address info\ndef load_address_info(filepath):\n    ## reads file and loads it into a DataFrame\n    df = pd.read_csv(filepath, encoding='ISO-8859-1', low_memory=False) \n    df.columns = df.columns.str.strip().str.lower()\n    year = os.path.basename(filepath).split(\"_\")[1]\n    df['year'] = int(year)\n    required_cols = ['address', 'city', 'state', 'zip', 'year']\n    if all(col in df.columns for col in ['address', 'city', 'state', 'zip']):",
+        "peekOfCode": "files = glob.glob(\"QualityMsrMDS_20*_Cleaned.csv\")\n## Function to load address info\ndef load_address_info(filepath):\n    ## reads file and loads it into a DataFrame\n    df = pd.read_csv(filepath, encoding='ISO-8859-1', low_memory=False) \n    ## Standardize column names\n    df.columns = df.columns.str.strip().str.lower()\n    ### Extract year from filename\n    year = os.path.basename(filepath).split(\"_\")[1]\n    df['year'] = int(year)",
         "detail": "project",
         "documentation": {}
     },
@@ -295,7 +295,7 @@
         "kind": 5,
         "importPath": "project",
         "description": "project",
-        "peekOfCode": "address_df = pd.concat([load_address_info(f) for f in files], ignore_index=True)\naddress_df.drop_duplicates(subset=['address', 'city', 'state', 'zip'], inplace=True)\n# Load ZIP code coordinates\nzip_latlng_df = pd.read_csv('uszips.csv')\nzip_latlng_df['zip'] = zip_latlng_df['zip'].astype(str).str.zfill(5)\naddress_df['zip'] = address_df['zip'].astype(str).str.zfill(5)\n# Merge\nmerged_df = pd.merge(\n    address_df,\n    zip_latlng_df[['zip', 'lat', 'lng']],",
+        "peekOfCode": "address_df = pd.concat([load_address_info(f) for f in files], ignore_index=True)\naddress_df.drop_duplicates(subset=['address', 'city', 'state', 'zip'], inplace=True)\n# Load ZIP code coordinates\nzip_latlng_df = pd.read_csv('uszips.csv')\nzip_latlng_df['zip'] = zip_latlng_df['zip'].astype(str).str.zfill(5)\naddress_df['zip'] = address_df['zip'].astype(str).str.zfill(5)\n# Merge dataframes\n# Merge address info with ZIP coordinates\nmerged_df = pd.merge(\n    address_df,",
         "detail": "project",
         "documentation": {}
     },
@@ -304,7 +304,7 @@
         "kind": 5,
         "importPath": "project",
         "description": "project",
-        "peekOfCode": "zip_latlng_df = pd.read_csv('uszips.csv')\nzip_latlng_df['zip'] = zip_latlng_df['zip'].astype(str).str.zfill(5)\naddress_df['zip'] = address_df['zip'].astype(str).str.zfill(5)\n# Merge\nmerged_df = pd.merge(\n    address_df,\n    zip_latlng_df[['zip', 'lat', 'lng']],\n    how='inner',\n    on='zip'\n)",
+        "peekOfCode": "zip_latlng_df = pd.read_csv('uszips.csv')\nzip_latlng_df['zip'] = zip_latlng_df['zip'].astype(str).str.zfill(5)\naddress_df['zip'] = address_df['zip'].astype(str).str.zfill(5)\n# Merge dataframes\n# Merge address info with ZIP coordinates\nmerged_df = pd.merge(\n    address_df,\n    zip_latlng_df[['zip', 'lat', 'lng']],\n    how='inner',\n    on='zip'",
         "detail": "project",
         "documentation": {}
     },
@@ -313,7 +313,7 @@
         "kind": 5,
         "importPath": "project",
         "description": "project",
-        "peekOfCode": "zip_latlng_df['zip'] = zip_latlng_df['zip'].astype(str).str.zfill(5)\naddress_df['zip'] = address_df['zip'].astype(str).str.zfill(5)\n# Merge\nmerged_df = pd.merge(\n    address_df,\n    zip_latlng_df[['zip', 'lat', 'lng']],\n    how='inner',\n    on='zip'\n)\nprint(f\"✅ Total records after merging with ZIP coordinates: {len(merged_df)}\")",
+        "peekOfCode": "zip_latlng_df['zip'] = zip_latlng_df['zip'].astype(str).str.zfill(5)\naddress_df['zip'] = address_df['zip'].astype(str).str.zfill(5)\n# Merge dataframes\n# Merge address info with ZIP coordinates\nmerged_df = pd.merge(\n    address_df,\n    zip_latlng_df[['zip', 'lat', 'lng']],\n    how='inner',\n    on='zip'\n)",
         "detail": "project",
         "documentation": {}
     },
@@ -322,7 +322,7 @@
         "kind": 5,
         "importPath": "project",
         "description": "project",
-        "peekOfCode": "address_df['zip'] = address_df['zip'].astype(str).str.zfill(5)\n# Merge\nmerged_df = pd.merge(\n    address_df,\n    zip_latlng_df[['zip', 'lat', 'lng']],\n    how='inner',\n    on='zip'\n)\nprint(f\"✅ Total records after merging with ZIP coordinates: {len(merged_df)}\")\n# Color palette for each year",
+        "peekOfCode": "address_df['zip'] = address_df['zip'].astype(str).str.zfill(5)\n# Merge dataframes\n# Merge address info with ZIP coordinates\nmerged_df = pd.merge(\n    address_df,\n    zip_latlng_df[['zip', 'lat', 'lng']],\n    how='inner',\n    on='zip'\n)\nprint(f\"Total records after merging with ZIP coordinates: {len(merged_df)}\")",
         "detail": "project",
         "documentation": {}
     },
@@ -331,7 +331,7 @@
         "kind": 5,
         "importPath": "project",
         "description": "project",
-        "peekOfCode": "merged_df = pd.merge(\n    address_df,\n    zip_latlng_df[['zip', 'lat', 'lng']],\n    how='inner',\n    on='zip'\n)\nprint(f\"✅ Total records after merging with ZIP coordinates: {len(merged_df)}\")\n# Color palette for each year\nyear_colors = {\n    2015: 'blue',",
+        "peekOfCode": "merged_df = pd.merge(\n    address_df,\n    zip_latlng_df[['zip', 'lat', 'lng']],\n    how='inner',\n    on='zip'\n)\nprint(f\"Total records after merging with ZIP coordinates: {len(merged_df)}\")\n# Color palette for each year\nyear_colors = {\n    2015: 'blue',",
         "detail": "project",
         "documentation": {}
     },

@@ -251,14 +251,17 @@ files = glob.glob("QualityMsrMDS_20*_Cleaned.csv")
 def load_address_info(filepath):
     ## reads file and loads it into a DataFrame
     df = pd.read_csv(filepath, encoding='ISO-8859-1', low_memory=False) 
+    ## Standardize column names
     df.columns = df.columns.str.strip().str.lower()
+    ### Extract year from filename
     year = os.path.basename(filepath).split("_")[1]
     df['year'] = int(year)
+    ### Check for required columns
     required_cols = ['address', 'city', 'state', 'zip', 'year']
     if all(col in df.columns for col in ['address', 'city', 'state', 'zip']):
         return df[required_cols]
     else:
-        print(f"⚠️ Skipping file {filepath}: required address columns not found.")
+        print(f" Skipping file {filepath}: required address columns not found.")
         return pd.DataFrame()
 
 # Combine and deduplicate
@@ -270,7 +273,8 @@ zip_latlng_df = pd.read_csv('uszips.csv')
 zip_latlng_df['zip'] = zip_latlng_df['zip'].astype(str).str.zfill(5)
 address_df['zip'] = address_df['zip'].astype(str).str.zfill(5)
 
-# Merge
+# Merge dataframes
+# Merge address info with ZIP coordinates
 merged_df = pd.merge(
     address_df,
     zip_latlng_df[['zip', 'lat', 'lng']],
@@ -278,7 +282,7 @@ merged_df = pd.merge(
     on='zip'
 )
 
-print(f"✅ Total records after merging with ZIP coordinates: {len(merged_df)}")
+print(f"Total records after merging with ZIP coordinates: {len(merged_df)}")
 
 # Color palette for each year
 year_colors = {
@@ -312,9 +316,9 @@ for year, color in year_colors.items():
 # Add layer control
 folium.LayerControl(collapsed=False).add_to(m)
 
-# Save the map
+# Save the map in html file
 m.save("nursing_homes_toggle_by_year.html")
-print("✅ Interactive toggle map saved as 'nursing_homes_toggle_by_year.html'")
+print("Interactive toggle map saved as 'nursing_homes_toggle_by_year.html'")
 
 ###################################
 ######### Regression Analysis ######
@@ -346,22 +350,22 @@ print("✅ Interactive toggle map saved as 'nursing_homes_toggle_by_year.html'")
 
 # health_files = glob.glob("./HealthDeficiencies_*.csv")
 
-# # ✅ Step 2: Function to load and label year
+# # Function to load and label year
 # def load_health_file(file_path):
 #     df = pd.read_csv(file_path, encoding='ISO-8859-1', low_memory=False)
 #     year = os.path.basename(file_path).split("_")[1].split(".")[0]
 #     df["Year"] = int(year)
 #     return df
 
-# # ✅ Step 3: Read and combine all files
+# # Read and combine all files
 # all_dfs = [load_health_file(f) for f in health_files]
 
 
-# # ✅ Step 5: Merge them
+# # Merge dataframe
 # health_df = pd.concat(all_dfs, ignore_index=True)
 
 
-# # ✅ Step 1: Select your features and target
+# # Select your features and target
 # # Make sure the following columns exist in your merged DataFrame
 # features = [
 #     'occupancy_rate',
@@ -374,19 +378,19 @@ print("✅ Interactive toggle map saved as 'nursing_homes_toggle_by_year.html'")
 
 # target = 'net_income'
 
-# # ✅ Step 2: Drop rows with missing data
+# ## Drop rows with missing data
 # data = merged_df.dropna(subset=features + [target])
 
 # X = data[features]
 # y = data[target]
 
-# # ✅ Step 3: Add constant term for intercept
+# # Add constant term for intercept
 # X = sm.add_constant(X)
 
-# # ✅ Step 4: Fit the model using statsmodels
+# # Fit the model using statsmodels
 # model = sm.OLS(y, X).fit()
 
-# # ✅ Step 5: Print summary of results
+# # Print summary of results
 # print(model.summary())
 
 ##################################################
@@ -397,7 +401,7 @@ print("✅ Interactive toggle map saved as 'nursing_homes_toggle_by_year.html'")
 # import glob
 # import os
 
-# # Step 1: Load all CostReport CSVs (2015–2021)
+# # Load all CostReport CSVs (2015–2021)
 # cost_files = {
 #     "2015": "2015_CostReport.csv",
 #     "2016": "2016_CostReport.csv",
@@ -408,109 +412,19 @@ print("✅ Interactive toggle map saved as 'nursing_homes_toggle_by_year.html'")
 #     "2021": "2021_CostReport.csv"
 # }
 
+### Create an empty list to hold each year's DataFrame
 # cost_dfs = []
+### Loop through files, read, and append the year
 # for year, path in cost_files.items():
 #     df = pd.read_csv(path, low_memory=False)
 #     df['year'] = int(year)
+## takes variable provider_ccn and converts it to string, then pads with leading zeros to make it 6 digits
 #     df['provider_ccn'] = df['provider_ccn'].astype(str).str.zfill(6)
 #     cost_dfs.append(df)
-
+### # Concatenate all DataFrames into one
 # cost_df = pd.concat(cost_dfs, ignore_index=True)
 
-# # Step 2: Load ProviderInfo files
-# provider_files = glob.glob("ProviderInfo_20*.csv")
-# provider_dfs = []
-
-# for file in provider_files:
-#     df = pd.read_csv(file, encoding='ISO-8859-1', low_memory=False)
-#     year = int(os.path.basename(file).split("_")[1].split(".")[0])
-#     df['year'] = year
-
-#     # ✅ Use exact casing: "Federal Provider Number"
-#     if "Federal Provider Number" in df.columns:
-#         df['Federal Provider Number'] = df['Federal Provider Number'].astype(str).str.zfill(6)
-#         df = df.rename(columns={"Federal Provider Number": "provider_ccn"})
-#         provider_dfs.append(df[['provider_ccn', 'year', 'staffing_rating', 'rn_staffing_rating']])
-#     else:
-#         print(f"⚠️ Skipping {file}: 'Federal Provider Number' column not found.")
-
-# provider_df = pd.concat(provider_dfs, ignore_index=True)
-
-# # Step 3: Merge cost and provider info on provider_ccn + year
-# merged_df = pd.merge(
-#     cost_df,
-#     provider_df,
-#     on=['provider_ccn', 'year'],
-#     how='inner'
-# )
-
-# # Step 4: Compute Occupancy Rate
-# merged_df['occupancy_rate'] = merged_df['total_days_total'] / merged_df['total_bed_days_available']
-
-# # Step 5: Estimate bedcert if needed
-# if 'bedcert' not in merged_df.columns:
-#     if 'number_of_beds' in merged_df.columns:
-#         merged_df['bedcert'] = merged_df['number_of_beds']
-#     elif 'total_bed_days_available' in merged_df.columns:
-#         merged_df['bedcert'] = merged_df['total_bed_days_available'] / 365
-#     else:
-#         raise ValueError("❌ Could not compute 'bedcert': missing both 'number_of_beds' and 'total_bed_days_available'")
-
-
-# # Step 6: Define features and target
-# features = [
-#     'occupancy_rate',
-#     'staffing_rating',
-#     'rn_staffing_rating',
-#     'total_liabilities',
-#     'total_salaries_from_worksheet_a',
-#     'bedcert'
-# ]
-# target = 'net_income'
-
-# # Step 7: Clean and fit model
-# for col in features + [target]:
-#     merged_df[col] = pd.to_numeric(merged_df[col], errors='coerce')
-
-# data = merged_df.dropna(subset=features + [target])
-# X = sm.add_constant(data[features])
-# y = data[target]
-
-# model = sm.OLS(y, X).fit()
-
-# # Step 8: Show regression summary
-# print(model.summary())
-
-#######################################
-# Regression Analysis with all years combined
-# This code assumes you have already cleaned the CostReport and ProviderInfo files
-
-# import pandas as pd
-# import statsmodels.api as sm
-# import glob
-# import os
-
-# # Step 1: Load all cleaned CostReport CSVs (2015–2021)
-# cost_files = {
-#     "2015": "2015_CostReport_cleaned.csv",
-#     "2016": "2016_CostReport_cleaned.csv",
-#     "2017": "2017_CostReport_cleaned.csv",
-#     "2018": "2018_CostReport_cleaned.csv",
-#     "2019": "2019_CostReport_cleaned.csv",
-#     "2020": "2020_CostReport_cleaned.csv",
-#     "2021": "2021_CostReport_cleaned.csv"
-# }
-
-# cost_dfs = []
-# for year, path in cost_files.items():
-#     df = pd.read_csv(path, low_memory=False)
-#     df['year'] = int(year)
-#     df['provider_ccn'] = df['provider_ccn'].astype(str).str.zfill(6)
-#     cost_dfs.append(df)
-
-# cost_df = pd.concat(cost_dfs, ignore_index=True)
-
-# # Step 2: Load ProviderInfo files
+### Load ProviderInfo files
 # provider_files = glob.glob("ProviderInfo_20*.csv")
 # provider_dfs = []
 
@@ -525,11 +439,11 @@ print("✅ Interactive toggle map saved as 'nursing_homes_toggle_by_year.html'")
 #         df = df.rename(columns={"Federal Provider Number": "provider_ccn"})
 #         provider_dfs.append(df[['provider_ccn', 'year', 'staffing_rating', 'rn_staffing_rating']])
 #     else:
-#         print(f"⚠️ Skipping {file}: 'Federal Provider Number' column not found.")
+#         print(f"Skipping {file}: 'Federal Provider Number' column not found.")
 
 # provider_df = pd.concat(provider_dfs, ignore_index=True)
 
-# # Step 3: Merge cost and provider info on provider_ccn + year
+# # Merge cost and provider info on provider_ccn + year
 # merged_df = pd.merge(
 #     cost_df,
 #     provider_df,
@@ -537,7 +451,7 @@ print("✅ Interactive toggle map saved as 'nursing_homes_toggle_by_year.html'")
 #     how='inner'
 # )
 
-# # Step 4: Compute Occupancy Rate
+# # Compute Occupancy Rate
 # merged_df['occupancy_rate'] = merged_df['total_days_total'] / merged_df['total_bed_days_available']
 
 # # Step 5: Estimate bedcert if needed
@@ -547,9 +461,105 @@ print("✅ Interactive toggle map saved as 'nursing_homes_toggle_by_year.html'")
 #     elif 'total_bed_days_available' in merged_df.columns:
 #         merged_df['bedcert'] = merged_df['total_bed_days_available'] / 365
 #     else:
-#         raise ValueError("❌ Could not compute 'bedcert': missing both 'number_of_beds' and 'total_bed_days_available'")
+#         raise ValueError("Could not compute 'bedcert': missing both 'number_of_beds' and 'total_bed_days_available'")
 
-# # Step 6: Define features and target (updated feature name here)
+
+# # Define features and target
+# features = [
+#     'occupancy_rate',
+#     'staffing_rating',
+#     'rn_staffing_rating',
+#     'total_liabilities',
+#     'total_salaries_from_worksheet_a',
+#     'bedcert'
+# ]
+# target = 'net_income'
+
+# # Clean and fit model
+# for col in features + [target]:
+#     merged_df[col] = pd.to_numeric(merged_df[col], errors='coerce')
+
+# data = merged_df.dropna(subset=features + [target])
+# X = sm.add_constant(data[features])
+# y = data[target]
+
+# model = sm.OLS(y, X).fit()
+
+# # Show regression summary
+# print(model.summary())
+
+#######################################
+# Regression Analysis with all years combined
+
+# import pandas as pd
+# import statsmodels.api as sm
+# import glob
+# import os
+
+# ## Load all cleaned CostReport CSVs (2015–2021)
+# cost_files = {
+#     "2015": "2015_CostReport_cleaned.csv",
+#     "2016": "2016_CostReport_cleaned.csv",
+#     "2017": "2017_CostReport_cleaned.csv",
+#     "2018": "2018_CostReport_cleaned.csv",
+#     "2019": "2019_CostReport_cleaned.csv",
+#     "2020": "2020_CostReport_cleaned.csv",
+#     "2021": "2021_CostReport_cleaned.csv"
+# }
+
+## create an empty list to hold each year's DataFrame
+# cost_dfs = []
+### Loop through files, read, and append the year
+# for year, path in cost_files.items():
+#     df = pd.read_csv(path, low_memory=False)
+#     df['year'] = int(year)
+#     df['provider_ccn'] = df['provider_ccn'].astype(str).str.zfill(6)
+#     cost_dfs.append(df)
+
+### Concatenate all DataFrames into one
+# cost_df = pd.concat(cost_dfs, ignore_index=True)
+
+# # Load ProviderInfo files
+# provider_files = glob.glob("ProviderInfo_20*.csv")
+# provider_dfs = []
+
+## loop through files, read, and append the year
+# for file in provider_files:
+#     df = pd.read_csv(file, encoding='ISO-8859-1', low_memory=False)
+#     year = int(os.path.basename(file).split("_")[1].split(".")[0])
+#     df['year'] = year
+
+#     # Use exact casing: "Federal Provider Number"
+#     if "Federal Provider Number" in df.columns:
+#         df['Federal Provider Number'] = df['Federal Provider Number'].astype(str).str.zfill(6)
+#         df = df.rename(columns={"Federal Provider Number": "provider_ccn"})
+#         provider_dfs.append(df[['provider_ccn', 'year', 'staffing_rating', 'rn_staffing_rating']])
+#     else:
+#         print(f"Skipping {file}: 'Federal Provider Number' column not found.")
+
+# provider_df = pd.concat(provider_dfs, ignore_index=True)
+
+# # Merge cost and provider info on provider_ccn + year
+# merged_df = pd.merge(
+#     cost_df,
+#     provider_df,
+#     on=['provider_ccn', 'year'],
+#     how='inner'
+# )
+
+# # Compute Occupancy Rate
+# merged_df['occupancy_rate'] = merged_df['total_days_total'] / merged_df['total_bed_days_available']
+
+# # Estimate bedcert if needed
+# if 'bedcert' not in merged_df.columns:
+#     if 'number_of_beds' in merged_df.columns:
+#         merged_df['bedcert'] = merged_df['number_of_beds']
+#     elif 'total_bed_days_available' in merged_df.columns:
+#         merged_df['bedcert'] = merged_df['total_bed_days_available'] / 365
+#     else:
+#         raise ValueError("Could not compute 'bedcert': missing both 'number_of_beds' and 'total_bed_days_available'")
+
+# # Define features and target (updated feature name here)
 # features = [
 #     'occupancy_rate',
 #     'staffing_rating',
@@ -560,7 +570,7 @@ print("✅ Interactive toggle map saved as 'nursing_homes_toggle_by_year.html'")
 # ]
 # target = 'net_income'
 
-# # Step 7: Clean and fit model
+# # Clean and fit model
 # for col in features + [target]:
 #     merged_df[col] = pd.to_numeric(merged_df[col], errors='coerce')
 
@@ -570,31 +580,32 @@ print("✅ Interactive toggle map saved as 'nursing_homes_toggle_by_year.html'")
 
 # model = sm.OLS(y, X).fit()
 
-# # Step 8: Show regression summary
+# ## Show regression summary
 # print(model.summary())
 
-
+######################################################
+######## ### Random Forest Regression Analysis ######
 
 # from sklearn.ensemble import RandomForestRegressor
 # from sklearn.metrics import r2_score, mean_squared_error
 # import numpy as np
 
-# # Step 1: Train the model
+# ###  Train the model
 # rf = RandomForestRegressor(n_estimators=100, random_state=42)
 # rf.fit(X, y)
 
-# # Step 2: Predict
+# ## Predict
 # y_pred = rf.predict(X)
 
-# # Step 3: Evaluate performance
+# ## Evaluate performance
 # r2 = r2_score(y, y_pred)
 # rmse = np.sqrt(mean_squared_error(y, y_pred))
 
-# print(f"\n🌲 Random Forest Regressor Results:")
+# print(f"\n Random Forest Regressor Results:")
 # print(f"R² Score: {r2:.3f}")
 # print(f"RMSE: {rmse:,.2f}")
 
-# # Step 4: Feature Importance
+# ## Feature Importance
 # import matplotlib.pyplot as plt
 
 # importances = rf.feature_importances_
@@ -613,6 +624,7 @@ print("✅ Interactive toggle map saved as 'nursing_homes_toggle_by_year.html'")
 
 ######################
 
+### LightGBM Regression Analysis
 # import pandas as pd
 # import numpy as np
 # import os
@@ -622,7 +634,7 @@ print("✅ Interactive toggle map saved as 'nursing_homes_toggle_by_year.html'")
 # import matplotlib.pyplot as plt
 # from lightgbm import LGBMRegressor, plot_importance
 
-# # Step 1: Load all cleaned CostReport CSVs (2015–2021)
+# ## Load all cleaned CostReport CSVs (2015–2021)
 # cost_files = {
 #     "2015": "2015_CostReport_cleaned.csv",
 #     "2016": "2016_CostReport_cleaned.csv",
@@ -633,7 +645,9 @@ print("✅ Interactive toggle map saved as 'nursing_homes_toggle_by_year.html'")
 #     "2021": "2021_CostReport_cleaned.csv"
 # }
 
+### Create an empty list to hold each year's DataFrame
 # all_dataframes = []
+### Loop through files, read, and append the year
 # for year, path in cost_files.items():
 #     df = pd.read_csv(path, low_memory=False)
 #     df['year'] = int(year)
@@ -642,7 +656,7 @@ print("✅ Interactive toggle map saved as 'nursing_homes_toggle_by_year.html'")
 # # Combine all years into one DataFrame
 # merged_df = pd.concat(all_dataframes, ignore_index=True)
 
-# # Step 2: Define features and target
+# ## Define features and target
 # features = [
 #     'occupancy_rate',
 #     'staffing_rating',
@@ -653,32 +667,32 @@ print("✅ Interactive toggle map saved as 'nursing_homes_toggle_by_year.html'")
 # ]
 # target = 'net_income'
 
-# # Step 3: Ensure columns are numeric
+# ## Ensure columns are numeric
 # for col in features + [target]:
 #     merged_df[col] = pd.to_numeric(merged_df[col], errors='coerce')
 
-# # Step 4: Clean the dataset
+# ## Clean the dataset
 # data = merged_df.dropna(subset=features + [target])
 # X = data[features]
 # y = data[target]
 
-# # Step 5: Split into train/test sets
+# ## Split into train/test sets
 # X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
 
-# # Step 6: Train the LightGBM model
+# ## Train the LightGBM model
 # model = LGBMRegressor(n_estimators=100, random_state=42)
 # model.fit(X_train, y_train)
 
-# # Step 7: Evaluate the model
+# ## Evaluate the model
 # y_pred = model.predict(X_test)
 # r2 = r2_score(y_test, y_pred)
 # rmse = np.sqrt(mean_squared_error(y_test, y_pred))
 
-# print("\n🌿 LightGBM Regression Results:")
+# print("\nLightGBM Regression Results:")
 # print(f"R² Score: {r2:.4f}")
 # print(f"RMSE: ${rmse:,.2f}")
 
-# # Step 8: Plot feature importance
+# ## Plot feature importance
 # plot_importance(model, title='LightGBM Feature Importance', xlabel='F Score')
 # plt.tight_layout()
 # plt.show()
