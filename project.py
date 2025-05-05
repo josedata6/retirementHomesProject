@@ -592,6 +592,7 @@ print("Interactive toggle map saved as 'nursing_homes_toggle_by_year.html'")
 
 # ###  Train the model
 # rf = RandomForestRegressor(n_estimators=100, random_state=42)
+### Fit the model
 # rf.fit(X, y)
 
 # ## Predict
@@ -612,8 +613,10 @@ print("Interactive toggle map saved as 'nursing_homes_toggle_by_year.html'")
 # indices = np.argsort(importances)[::-1]
 # features_sorted = X.columns[indices]
 
+### Plot feature importance
 # plt.figure(figsize=(8, 6))
 # plt.title("Feature Importance (Random Forest)")
+### Bar plot of feature importance
 # plt.barh(features_sorted, importances[indices], color="skyblue")
 # plt.xlabel("Relative Importance")
 # plt.gca().invert_yaxis()
