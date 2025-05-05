@@ -1,3 +1,6 @@
+#### merging and analyzing nursing home data 
+##### 'Year' column for reference
+
 import pandas as pd
 import matplotlib.pyplot as plt
 import os
