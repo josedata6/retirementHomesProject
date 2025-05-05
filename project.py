@@ -435,12 +435,15 @@ print("Interactive toggle map saved as 'nursing_homes_toggle_by_year.html'")
 
 #     # Use exact casing: "Federal Provider Number"
 #     if "Federal Provider Number" in df.columns:
+#### takes variable Federal Provider Number and converts it to string, then pads with leading zeros to make it 6 digits
 #         df['Federal Provider Number'] = df['Federal Provider Number'].astype(str).str.zfill(6)
+### #         # Rename the column to match cost_df
 #         df = df.rename(columns={"Federal Provider Number": "provider_ccn"})
+#### #         # Append relevant columns
 #         provider_dfs.append(df[['provider_ccn', 'year', 'staffing_rating', 'rn_staffing_rating']])
 #     else:
 #         print(f"Skipping {file}: 'Federal Provider Number' column not found.")
-
+### # # Concatenate all ProviderInfo DataFrames into one
 # provider_df = pd.concat(provider_dfs, ignore_index=True)
 
 # # Merge cost and provider info on provider_ccn + year
@@ -600,6 +603,7 @@ print("Interactive toggle map saved as 'nursing_homes_toggle_by_year.html'")
 
 # ## Evaluate performance
 # r2 = r2_score(y, y_pred)
+### Calculate RMSE
 # rmse = np.sqrt(mean_squared_error(y, y_pred))
 
 # print(f"\n Random Forest Regressor Results:")
