@@ -29,9 +29,18 @@ for year, path in files.items():
 merged_df = pd.concat(all_dataframes, ignore_index=True)
 
 # Define features and target
-X = merged_df[['gross_revenue', 'total_income', 'total_costs', 'total_current_assets',
-               'total_current_liabilities', 'total_liabilities', 'total_fund_balances',
-               'total_fixed_assets']]
+X = merged_df[[
+    # 'cash_on_hand_and_in_banks',
+    # 'overhead_non_salary_costs',
+    # 'total_fund_balances',
+    'gross_revenue',
+    'total_income',
+    'total_costs',
+    'total_current_assets',
+    'total_current_liabilities',
+    'total_liabilities',
+    'total_fund_balances',
+    'total_fixed_assets']]
 
 y = merged_df['net_income']
 
@@ -71,27 +80,20 @@ print(f"\nFinal RMSE on Test Set: {rmse:.2f}")
 print(f"Mean Squared Error: {mse:.4f}")
 print(f"R^2 Score: {r2:.4f}")
 
-# Feature importance visualization
-feature_importance = model.feature_importances_
-sorted_idx = np.argsort(feature_importance)[::-1]
+# # Feature importance visualization
+# feature_importance = model.feature_importances_
+# sorted_idx = np.argsort(feature_importance)[::-1]
 
-plt.figure(figsize=(10, 6))
-plt.barh(np.array(X.columns)[sorted_idx], feature_importance[sorted_idx])
-plt.xlabel("Feature Importance")
-plt.title("XGBoost Feature Importance")
-plt.show()
+# plt.figure(figsize=(10, 6))
+# plt.barh(np.array(X.columns)[sorted_idx], feature_importance[sorted_idx])
+# plt.xlabel("Feature Importance")
+# plt.title("XGBoost Feature Importance")
+# plt.show()
 
-# Residual analysis
-residuals = y_test - y_pred
-sns.histplot(residuals, bins=30, kde=True)
-plt.xlabel("Residuals")
-plt.title("Residual Distribution")
-plt.show()
+# plt.scatter(y_test, y_pred, alpha=0.5)
+# plt.plot([y_test.min(), y_test.max()], [y_test.min(), y_test.max()], 'r--', lw=2)
+# plt.xlabel("Actual Values")
+# plt.ylabel("Predicted Values")
+# plt.title("XGBoost (XGBRegressor): Actual vs Predicted")
+# plt.show()
 
-
-plt.scatter(y_test, y_pred, alpha=0.5)
-plt.plot([y_test.min(), y_test.max()], [y_test.min(), y_test.max()], 'r--', lw=2)
-plt.xlabel("Actual Values")
-plt.ylabel("Predicted Values")
-plt.title("XGBoost (XGBRegressor): Actual vs Predicted")
-plt.show()
