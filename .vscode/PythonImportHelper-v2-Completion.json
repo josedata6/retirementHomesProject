@@ -77,6 +77,22 @@
         "documentation": {}
     },
     {
+        "label": "train_test_split",
+        "importPath": "sklearn.model_selection",
+        "description": "sklearn.model_selection",
+        "isExtraImport": true,
+        "detail": "sklearn.model_selection",
+        "documentation": {}
+    },
+    {
+        "label": "GridSearchCV",
+        "importPath": "sklearn.model_selection",
+        "description": "sklearn.model_selection",
+        "isExtraImport": true,
+        "detail": "sklearn.model_selection",
+        "documentation": {}
+    },
+    {
         "label": "StandardScaler",
         "importPath": "sklearn.preprocessing",
         "description": "sklearn.preprocessing",
@@ -90,6 +106,30 @@
         "description": "sklearn.preprocessing",
         "isExtraImport": true,
         "detail": "sklearn.preprocessing",
+        "documentation": {}
+    },
+    {
+        "label": "StandardScaler",
+        "importPath": "sklearn.preprocessing",
+        "description": "sklearn.preprocessing",
+        "isExtraImport": true,
+        "detail": "sklearn.preprocessing",
+        "documentation": {}
+    },
+    {
+        "label": "mean_squared_error",
+        "importPath": "sklearn.metrics",
+        "description": "sklearn.metrics",
+        "isExtraImport": true,
+        "detail": "sklearn.metrics",
+        "documentation": {}
+    },
+    {
+        "label": "r2_score",
+        "importPath": "sklearn.metrics",
+        "description": "sklearn.metrics",
+        "isExtraImport": true,
+        "detail": "sklearn.metrics",
         "documentation": {}
     },
     {
@@ -162,145 +202,145 @@
     {
         "label": "files",
         "kind": 5,
-        "importPath": "FINAL Gradient Boost",
-        "description": "FINAL Gradient Boost",
-        "peekOfCode": "files = {\n    \"2015\": \"2015_CostReport_cleaned.csv\",\n    \"2016\": \"2016_CostReport_cleaned.csv\",\n    \"2017\": \"2017_CostReport_cleaned.csv\",\n    \"2018\": \"2018_CostReport_cleaned.csv\",\n    \"2019\": \"2019_CostReport_cleaned.csv\",\n    \"2020\": \"2020_CostReport_cleaned.csv\",\n    \"2021\": \"2021_CostReport_cleaned.csv\"\n}\nall_dataframes = []",
-        "detail": "FINAL Gradient Boost",
+        "importPath": "Final GB Model",
+        "description": "Final GB Model",
+        "peekOfCode": "files = {\n    \"2015\": \"2015_CostReport_cleaned.csv\",\n    \"2016\": \"2016_CostReport_cleaned.csv\",\n    \"2017\": \"2017_CostReport_cleaned.csv\",\n    \"2018\": \"2018_CostReport_cleaned.csv\",\n    \"2019\": \"2019_CostReport_cleaned.csv\",\n    \"2020\": \"2020_CostReport_cleaned.csv\",\n    \"2021\": \"2021_CostReport_cleaned.csv\"\n}\n# List to store dataframes for each year",
+        "detail": "Final GB Model",
         "documentation": {}
     },
     {
         "label": "all_dataframes",
         "kind": 5,
-        "importPath": "FINAL Gradient Boost",
-        "description": "FINAL Gradient Boost",
-        "peekOfCode": "all_dataframes = []\n# Read and merge data\nfor year, path in files.items():\n    df = pd.read_csv(path, low_memory=False)\n    df['Year'] = int(year)\n    all_dataframes.append(df)\nmerged_df = pd.concat(all_dataframes, ignore_index=True)\n# Define features and target\nX = merged_df[[\n    # 'cash_on_hand_and_in_banks',",
-        "detail": "FINAL Gradient Boost",
+        "importPath": "Final GB Model",
+        "description": "Final GB Model",
+        "peekOfCode": "all_dataframes = []\n# Loop through each file, read it, add a 'Year' column, and append to the list\nfor year, path in files.items():\n    df = pd.read_csv(path, low_memory=False)  # read CSV file\n    df['Year'] = int(year)  # add a 'Year' column for reference\n    all_dataframes.append(df)  # append the dataframe to the list\n# Combine all yearly dataframes into one single dataframe\nmerged_df = pd.concat(all_dataframes, ignore_index=True)\n# Selecting relevant features for the model (commented out features are excluded)\nX = merged_df[[",
+        "detail": "Final GB Model",
         "documentation": {}
     },
     {
         "label": "merged_df",
         "kind": 5,
-        "importPath": "FINAL Gradient Boost",
-        "description": "FINAL Gradient Boost",
-        "peekOfCode": "merged_df = pd.concat(all_dataframes, ignore_index=True)\n# Define features and target\nX = merged_df[[\n    # 'cash_on_hand_and_in_banks',\n    # 'overhead_non_salary_costs',\n    # 'total_fund_balances',\n    'gross_revenue',\n    'total_income',\n    'total_costs',\n    'total_current_assets',",
-        "detail": "FINAL Gradient Boost",
+        "importPath": "Final GB Model",
+        "description": "Final GB Model",
+        "peekOfCode": "merged_df = pd.concat(all_dataframes, ignore_index=True)\n# Selecting relevant features for the model (commented out features are excluded)\nX = merged_df[[\n    # 'cash_on_hand_and_in_banks',\n    # 'overhead_non_salary_costs',\n    # 'total_fund_balances',\n    'gross_revenue',\n    'total_income',\n    'total_costs',\n    'total_current_assets',",
+        "detail": "Final GB Model",
         "documentation": {}
     },
     {
         "label": "X",
         "kind": 5,
-        "importPath": "FINAL Gradient Boost",
-        "description": "FINAL Gradient Boost",
+        "importPath": "Final GB Model",
+        "description": "Final GB Model",
         "peekOfCode": "X = merged_df[[\n    # 'cash_on_hand_and_in_banks',\n    # 'overhead_non_salary_costs',\n    # 'total_fund_balances',\n    'gross_revenue',\n    'total_income',\n    'total_costs',\n    'total_current_assets',\n    'total_current_liabilities',\n    'total_liabilities',",
-        "detail": "FINAL Gradient Boost",
+        "detail": "Final GB Model",
         "documentation": {}
     },
     {
         "label": "y",
         "kind": 5,
-        "importPath": "FINAL Gradient Boost",
-        "description": "FINAL Gradient Boost",
-        "peekOfCode": "y = merged_df['net_income']\n# Train-test split\nX_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)\n# Feature scaling for numeric values\nscaler = StandardScaler()\nX_train = scaler.fit_transform(X_train)\nX_test = scaler.transform(X_test)\n# Hyperparameter tuning\nparam_grid = {\n    'n_estimators': [100, 200, 300],",
-        "detail": "FINAL Gradient Boost",
+        "importPath": "Final GB Model",
+        "description": "Final GB Model",
+        "peekOfCode": "y = merged_df['net_income']\n# Split data into training and testing sets (80% train, 20% test)\nX_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)\n# Standardize the features (zero mean, unit variance)\nscaler = StandardScaler()\nX_train = scaler.fit_transform(X_train)  # fit on training data\nX_test = scaler.transform(X_test)  # transform test data using the same scaler\n# Define parameter grid for hyperparameter tuning\nparam_grid = {\n    'n_estimators': [100, 200, 300],  # number of trees",
+        "detail": "Final GB Model",
         "documentation": {}
     },
     {
         "label": "scaler",
         "kind": 5,
-        "importPath": "FINAL Gradient Boost",
-        "description": "FINAL Gradient Boost",
-        "peekOfCode": "scaler = StandardScaler()\nX_train = scaler.fit_transform(X_train)\nX_test = scaler.transform(X_test)\n# Hyperparameter tuning\nparam_grid = {\n    'n_estimators': [100, 200, 300],\n    'learning_rate': [0.05, 0.1, 0.2],\n    'max_depth': [3, 4, 5]\n}\ngrid_search = GridSearchCV(xgb.XGBRegressor(random_state=42), param_grid, cv=5, scoring='r2')",
-        "detail": "FINAL Gradient Boost",
+        "importPath": "Final GB Model",
+        "description": "Final GB Model",
+        "peekOfCode": "scaler = StandardScaler()\nX_train = scaler.fit_transform(X_train)  # fit on training data\nX_test = scaler.transform(X_test)  # transform test data using the same scaler\n# Define parameter grid for hyperparameter tuning\nparam_grid = {\n    'n_estimators': [100, 200, 300],  # number of trees\n    'learning_rate': [0.05, 0.1, 0.2],  # step size shrinkage\n    'max_depth': [3, 4, 5]  # maximum depth of trees\n}\n# Use GridSearchCV to find the best combination of parameters",
+        "detail": "Final GB Model",
         "documentation": {}
     },
     {
         "label": "X_train",
         "kind": 5,
-        "importPath": "FINAL Gradient Boost",
-        "description": "FINAL Gradient Boost",
-        "peekOfCode": "X_train = scaler.fit_transform(X_train)\nX_test = scaler.transform(X_test)\n# Hyperparameter tuning\nparam_grid = {\n    'n_estimators': [100, 200, 300],\n    'learning_rate': [0.05, 0.1, 0.2],\n    'max_depth': [3, 4, 5]\n}\ngrid_search = GridSearchCV(xgb.XGBRegressor(random_state=42), param_grid, cv=5, scoring='r2')\ngrid_search.fit(X_train, y_train)",
-        "detail": "FINAL Gradient Boost",
+        "importPath": "Final GB Model",
+        "description": "Final GB Model",
+        "peekOfCode": "X_train = scaler.fit_transform(X_train)  # fit on training data\nX_test = scaler.transform(X_test)  # transform test data using the same scaler\n# Define parameter grid for hyperparameter tuning\nparam_grid = {\n    'n_estimators': [100, 200, 300],  # number of trees\n    'learning_rate': [0.05, 0.1, 0.2],  # step size shrinkage\n    'max_depth': [3, 4, 5]  # maximum depth of trees\n}\n# Use GridSearchCV to find the best combination of parameters\ngrid_search = GridSearchCV(xgb.XGBRegressor(random_state=42), param_grid, cv=5, scoring='r2')",
+        "detail": "Final GB Model",
         "documentation": {}
     },
     {
         "label": "X_test",
         "kind": 5,
-        "importPath": "FINAL Gradient Boost",
-        "description": "FINAL Gradient Boost",
-        "peekOfCode": "X_test = scaler.transform(X_test)\n# Hyperparameter tuning\nparam_grid = {\n    'n_estimators': [100, 200, 300],\n    'learning_rate': [0.05, 0.1, 0.2],\n    'max_depth': [3, 4, 5]\n}\ngrid_search = GridSearchCV(xgb.XGBRegressor(random_state=42), param_grid, cv=5, scoring='r2')\ngrid_search.fit(X_train, y_train)\n# Best model from GridSearch",
-        "detail": "FINAL Gradient Boost",
+        "importPath": "Final GB Model",
+        "description": "Final GB Model",
+        "peekOfCode": "X_test = scaler.transform(X_test)  # transform test data using the same scaler\n# Define parameter grid for hyperparameter tuning\nparam_grid = {\n    'n_estimators': [100, 200, 300],  # number of trees\n    'learning_rate': [0.05, 0.1, 0.2],  # step size shrinkage\n    'max_depth': [3, 4, 5]  # maximum depth of trees\n}\n# Use GridSearchCV to find the best combination of parameters\ngrid_search = GridSearchCV(xgb.XGBRegressor(random_state=42), param_grid, cv=5, scoring='r2')\ngrid_search.fit(X_train, y_train)  # train with cross-validation",
+        "detail": "Final GB Model",
         "documentation": {}
     },
     {
         "label": "param_grid",
         "kind": 5,
-        "importPath": "FINAL Gradient Boost",
-        "description": "FINAL Gradient Boost",
-        "peekOfCode": "param_grid = {\n    'n_estimators': [100, 200, 300],\n    'learning_rate': [0.05, 0.1, 0.2],\n    'max_depth': [3, 4, 5]\n}\ngrid_search = GridSearchCV(xgb.XGBRegressor(random_state=42), param_grid, cv=5, scoring='r2')\ngrid_search.fit(X_train, y_train)\n# Best model from GridSearch\nbest_params = grid_search.best_params_\nprint(\"Best Parameters:\", best_params)",
-        "detail": "FINAL Gradient Boost",
+        "importPath": "Final GB Model",
+        "description": "Final GB Model",
+        "peekOfCode": "param_grid = {\n    'n_estimators': [100, 200, 300],  # number of trees\n    'learning_rate': [0.05, 0.1, 0.2],  # step size shrinkage\n    'max_depth': [3, 4, 5]  # maximum depth of trees\n}\n# Use GridSearchCV to find the best combination of parameters\ngrid_search = GridSearchCV(xgb.XGBRegressor(random_state=42), param_grid, cv=5, scoring='r2')\ngrid_search.fit(X_train, y_train)  # train with cross-validation\n# Retrieve and print the best hyperparameters found\nbest_params = grid_search.best_params_",
+        "detail": "Final GB Model",
         "documentation": {}
     },
     {
         "label": "grid_search",
         "kind": 5,
-        "importPath": "FINAL Gradient Boost",
-        "description": "FINAL Gradient Boost",
-        "peekOfCode": "grid_search = GridSearchCV(xgb.XGBRegressor(random_state=42), param_grid, cv=5, scoring='r2')\ngrid_search.fit(X_train, y_train)\n# Best model from GridSearch\nbest_params = grid_search.best_params_\nprint(\"Best Parameters:\", best_params)\n# Train XGBoost model with best parameters\nmodel = xgb.XGBRegressor(**best_params, random_state=42)\nmodel.fit(X_train, y_train)\n# Predictions and metrics\ny_pred = model.predict(X_test)",
-        "detail": "FINAL Gradient Boost",
+        "importPath": "Final GB Model",
+        "description": "Final GB Model",
+        "peekOfCode": "grid_search = GridSearchCV(xgb.XGBRegressor(random_state=42), param_grid, cv=5, scoring='r2')\ngrid_search.fit(X_train, y_train)  # train with cross-validation\n# Retrieve and print the best hyperparameters found\nbest_params = grid_search.best_params_\nprint(\"Best Parameters:\", best_params)\n# Train final model using the best parameters from GridSearch\nmodel = xgb.XGBRegressor(**best_params, random_state=42)\nmodel.fit(X_train, y_train)\n# Make predictions on the test set\ny_pred = model.predict(X_test)",
+        "detail": "Final GB Model",
         "documentation": {}
     },
     {
         "label": "best_params",
         "kind": 5,
-        "importPath": "FINAL Gradient Boost",
-        "description": "FINAL Gradient Boost",
-        "peekOfCode": "best_params = grid_search.best_params_\nprint(\"Best Parameters:\", best_params)\n# Train XGBoost model with best parameters\nmodel = xgb.XGBRegressor(**best_params, random_state=42)\nmodel.fit(X_train, y_train)\n# Predictions and metrics\ny_pred = model.predict(X_test)\nmse = mean_squared_error(y_test, y_pred)\nr2 = r2_score(y_test, y_pred)\nrmse = np.sqrt(mse)",
-        "detail": "FINAL Gradient Boost",
+        "importPath": "Final GB Model",
+        "description": "Final GB Model",
+        "peekOfCode": "best_params = grid_search.best_params_\nprint(\"Best Parameters:\", best_params)\n# Train final model using the best parameters from GridSearch\nmodel = xgb.XGBRegressor(**best_params, random_state=42)\nmodel.fit(X_train, y_train)\n# Make predictions on the test set\ny_pred = model.predict(X_test)\n# Evaluate the model using common regression metrics\nmse = mean_squared_error(y_test, y_pred)  # mean squared error\nr2 = r2_score(y_test, y_pred)  # R-squared score",
+        "detail": "Final GB Model",
         "documentation": {}
     },
     {
         "label": "model",
         "kind": 5,
-        "importPath": "FINAL Gradient Boost",
-        "description": "FINAL Gradient Boost",
-        "peekOfCode": "model = xgb.XGBRegressor(**best_params, random_state=42)\nmodel.fit(X_train, y_train)\n# Predictions and metrics\ny_pred = model.predict(X_test)\nmse = mean_squared_error(y_test, y_pred)\nr2 = r2_score(y_test, y_pred)\nrmse = np.sqrt(mse)\nprint(f\"\\nFinal RMSE on Test Set: {rmse:.2f}\")\nprint(f\"Mean Squared Error: {mse:.4f}\")\nprint(f\"R^2 Score: {r2:.4f}\")",
-        "detail": "FINAL Gradient Boost",
+        "importPath": "Final GB Model",
+        "description": "Final GB Model",
+        "peekOfCode": "model = xgb.XGBRegressor(**best_params, random_state=42)\nmodel.fit(X_train, y_train)\n# Make predictions on the test set\ny_pred = model.predict(X_test)\n# Evaluate the model using common regression metrics\nmse = mean_squared_error(y_test, y_pred)  # mean squared error\nr2 = r2_score(y_test, y_pred)  # R-squared score\nrmse = np.sqrt(mse)  # root mean squared error\n# Print evaluation results\nprint(f\"\\nFinal RMSE on Test Set: {rmse:.2f}\")",
+        "detail": "Final GB Model",
         "documentation": {}
     },
     {
         "label": "y_pred",
         "kind": 5,
-        "importPath": "FINAL Gradient Boost",
-        "description": "FINAL Gradient Boost",
-        "peekOfCode": "y_pred = model.predict(X_test)\nmse = mean_squared_error(y_test, y_pred)\nr2 = r2_score(y_test, y_pred)\nrmse = np.sqrt(mse)\nprint(f\"\\nFinal RMSE on Test Set: {rmse:.2f}\")\nprint(f\"Mean Squared Error: {mse:.4f}\")\nprint(f\"R^2 Score: {r2:.4f}\")\n# # Feature importance visualization\n# feature_importance = model.feature_importances_\n# sorted_idx = np.argsort(feature_importance)[::-1]",
-        "detail": "FINAL Gradient Boost",
+        "importPath": "Final GB Model",
+        "description": "Final GB Model",
+        "peekOfCode": "y_pred = model.predict(X_test)\n# Evaluate the model using common regression metrics\nmse = mean_squared_error(y_test, y_pred)  # mean squared error\nr2 = r2_score(y_test, y_pred)  # R-squared score\nrmse = np.sqrt(mse)  # root mean squared error\n# Print evaluation results\nprint(f\"\\nFinal RMSE on Test Set: {rmse:.2f}\")\nprint(f\"Mean Squared Error: {mse:.4f}\")\nprint(f\"R^2 Score: {r2:.4f}\")\n# # Feature importance visualization (currently commented out)",
+        "detail": "Final GB Model",
         "documentation": {}
     },
     {
         "label": "mse",
         "kind": 5,
-        "importPath": "FINAL Gradient Boost",
-        "description": "FINAL Gradient Boost",
-        "peekOfCode": "mse = mean_squared_error(y_test, y_pred)\nr2 = r2_score(y_test, y_pred)\nrmse = np.sqrt(mse)\nprint(f\"\\nFinal RMSE on Test Set: {rmse:.2f}\")\nprint(f\"Mean Squared Error: {mse:.4f}\")\nprint(f\"R^2 Score: {r2:.4f}\")\n# # Feature importance visualization\n# feature_importance = model.feature_importances_\n# sorted_idx = np.argsort(feature_importance)[::-1]\n# plt.figure(figsize=(10, 6))",
-        "detail": "FINAL Gradient Boost",
+        "importPath": "Final GB Model",
+        "description": "Final GB Model",
+        "peekOfCode": "mse = mean_squared_error(y_test, y_pred)  # mean squared error\nr2 = r2_score(y_test, y_pred)  # R-squared score\nrmse = np.sqrt(mse)  # root mean squared error\n# Print evaluation results\nprint(f\"\\nFinal RMSE on Test Set: {rmse:.2f}\")\nprint(f\"Mean Squared Error: {mse:.4f}\")\nprint(f\"R^2 Score: {r2:.4f}\")\n# # Feature importance visualization (currently commented out)\n# feature_importance = model.feature_importances_\n# sorted_idx = np.argsort(feature_importance)[::-1]",
+        "detail": "Final GB Model",
         "documentation": {}
     },
     {
         "label": "r2",
         "kind": 5,
-        "importPath": "FINAL Gradient Boost",
-        "description": "FINAL Gradient Boost",
-        "peekOfCode": "r2 = r2_score(y_test, y_pred)\nrmse = np.sqrt(mse)\nprint(f\"\\nFinal RMSE on Test Set: {rmse:.2f}\")\nprint(f\"Mean Squared Error: {mse:.4f}\")\nprint(f\"R^2 Score: {r2:.4f}\")\n# # Feature importance visualization\n# feature_importance = model.feature_importances_\n# sorted_idx = np.argsort(feature_importance)[::-1]\n# plt.figure(figsize=(10, 6))\n# plt.barh(np.array(X.columns)[sorted_idx], feature_importance[sorted_idx])",
-        "detail": "FINAL Gradient Boost",
+        "importPath": "Final GB Model",
+        "description": "Final GB Model",
+        "peekOfCode": "r2 = r2_score(y_test, y_pred)  # R-squared score\nrmse = np.sqrt(mse)  # root mean squared error\n# Print evaluation results\nprint(f\"\\nFinal RMSE on Test Set: {rmse:.2f}\")\nprint(f\"Mean Squared Error: {mse:.4f}\")\nprint(f\"R^2 Score: {r2:.4f}\")\n# # Feature importance visualization (currently commented out)\n# feature_importance = model.feature_importances_\n# sorted_idx = np.argsort(feature_importance)[::-1]\n# plt.figure(figsize=(10, 6))",
+        "detail": "Final GB Model",
         "documentation": {}
     },
     {
         "label": "rmse",
         "kind": 5,
-        "importPath": "FINAL Gradient Boost",
-        "description": "FINAL Gradient Boost",
-        "peekOfCode": "rmse = np.sqrt(mse)\nprint(f\"\\nFinal RMSE on Test Set: {rmse:.2f}\")\nprint(f\"Mean Squared Error: {mse:.4f}\")\nprint(f\"R^2 Score: {r2:.4f}\")\n# # Feature importance visualization\n# feature_importance = model.feature_importances_\n# sorted_idx = np.argsort(feature_importance)[::-1]\n# plt.figure(figsize=(10, 6))\n# plt.barh(np.array(X.columns)[sorted_idx], feature_importance[sorted_idx])\n# plt.xlabel(\"Feature Importance\")",
-        "detail": "FINAL Gradient Boost",
+        "importPath": "Final GB Model",
+        "description": "Final GB Model",
+        "peekOfCode": "rmse = np.sqrt(mse)  # root mean squared error\n# Print evaluation results\nprint(f\"\\nFinal RMSE on Test Set: {rmse:.2f}\")\nprint(f\"Mean Squared Error: {mse:.4f}\")\nprint(f\"R^2 Score: {r2:.4f}\")\n# # Feature importance visualization (currently commented out)\n# feature_importance = model.feature_importances_\n# sorted_idx = np.argsort(feature_importance)[::-1]\n# plt.figure(figsize=(10, 6))\n# plt.barh(np.array(X.columns)[sorted_idx], feature_importance[sorted_idx])",
+        "detail": "Final GB Model",
         "documentation": {}
     },
     {
@@ -390,6 +430,150 @@
         "importPath": "project",
         "description": "project",
         "peekOfCode": "m = folium.Map(location=[merged_df['lat'].mean(), merged_df['lng'].mean()], zoom_start=5)\n# Create a FeatureGroup for each year\nfor year, color in year_colors.items():\n    year_data = merged_df[merged_df['year'] == year]\n    fg = folium.FeatureGroup(name=f\"{year}\", show=True)\n    cluster = MarkerCluster().add_to(fg)\n    for _, row in year_data.iterrows():\n        folium.Marker(\n            location=[row['lat'], row['lng']],\n            popup=f\"{row['address']}, {row['city']}, {row['state']} {row['zip']} ({row['year']})\",",
+        "detail": "project",
+        "documentation": {}
+    },
+    {
+        "label": "files",
+        "kind": 5,
+        "importPath": "project",
+        "description": "project",
+        "peekOfCode": "files = {\n    \"2015\": \"2015_CostReport_cleaned.csv\",\n    \"2016\": \"2016_CostReport_cleaned.csv\",\n    \"2017\": \"2017_CostReport_cleaned.csv\",\n    \"2018\": \"2018_CostReport_cleaned.csv\",\n    \"2019\": \"2019_CostReport_cleaned.csv\",\n    \"2020\": \"2020_CostReport_cleaned.csv\",\n    \"2021\": \"2021_CostReport_cleaned.csv\"\n}\n# List to store dataframes for each year",
+        "detail": "project",
+        "documentation": {}
+    },
+    {
+        "label": "all_dataframes",
+        "kind": 5,
+        "importPath": "project",
+        "description": "project",
+        "peekOfCode": "all_dataframes = []\n# Loop through each file, read it, add a 'Year' column, and append to the list\nfor year, path in files.items():\n    df = pd.read_csv(path, low_memory=False)  # read CSV file\n    df['Year'] = int(year)  # add a 'Year' column for reference\n    all_dataframes.append(df)  # append the dataframe to the list\n# Combine all yearly dataframes into one single dataframe\nmerged_df = pd.concat(all_dataframes, ignore_index=True)\n# Selecting relevant features for the model (commented out features are excluded)\nX = merged_df[[",
+        "detail": "project",
+        "documentation": {}
+    },
+    {
+        "label": "merged_df",
+        "kind": 5,
+        "importPath": "project",
+        "description": "project",
+        "peekOfCode": "merged_df = pd.concat(all_dataframes, ignore_index=True)\n# Selecting relevant features for the model (commented out features are excluded)\nX = merged_df[[\n    # 'cash_on_hand_and_in_banks',\n    # 'overhead_non_salary_costs',\n    # 'total_fund_balances',\n    'gross_revenue',\n    'total_income',\n    'total_costs',\n    'total_current_assets',",
+        "detail": "project",
+        "documentation": {}
+    },
+    {
+        "label": "X",
+        "kind": 5,
+        "importPath": "project",
+        "description": "project",
+        "peekOfCode": "X = merged_df[[\n    # 'cash_on_hand_and_in_banks',\n    # 'overhead_non_salary_costs',\n    # 'total_fund_balances',\n    'gross_revenue',\n    'total_income',\n    'total_costs',\n    'total_current_assets',\n    'total_current_liabilities',\n    'total_liabilities',",
+        "detail": "project",
+        "documentation": {}
+    },
+    {
+        "label": "y",
+        "kind": 5,
+        "importPath": "project",
+        "description": "project",
+        "peekOfCode": "y = merged_df['net_income']\n# Split data into training and testing sets (80% train, 20% test)\nX_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)\n# Standardize the features (zero mean, unit variance)\nscaler = StandardScaler()\nX_train = scaler.fit_transform(X_train)  # fit on training data\nX_test = scaler.transform(X_test)  # transform test data using the same scaler\n# Define parameter grid for hyperparameter tuning\nparam_grid = {\n    'n_estimators': [100, 200, 300],  # number of trees",
+        "detail": "project",
+        "documentation": {}
+    },
+    {
+        "label": "scaler",
+        "kind": 5,
+        "importPath": "project",
+        "description": "project",
+        "peekOfCode": "scaler = StandardScaler()\nX_train = scaler.fit_transform(X_train)  # fit on training data\nX_test = scaler.transform(X_test)  # transform test data using the same scaler\n# Define parameter grid for hyperparameter tuning\nparam_grid = {\n    'n_estimators': [100, 200, 300],  # number of trees\n    'learning_rate': [0.05, 0.1, 0.2],  # step size shrinkage\n    'max_depth': [3, 4, 5]  # maximum depth of trees\n}\n# Use GridSearchCV to find the best combination of parameters",
+        "detail": "project",
+        "documentation": {}
+    },
+    {
+        "label": "X_train",
+        "kind": 5,
+        "importPath": "project",
+        "description": "project",
+        "peekOfCode": "X_train = scaler.fit_transform(X_train)  # fit on training data\nX_test = scaler.transform(X_test)  # transform test data using the same scaler\n# Define parameter grid for hyperparameter tuning\nparam_grid = {\n    'n_estimators': [100, 200, 300],  # number of trees\n    'learning_rate': [0.05, 0.1, 0.2],  # step size shrinkage\n    'max_depth': [3, 4, 5]  # maximum depth of trees\n}\n# Use GridSearchCV to find the best combination of parameters\ngrid_search = GridSearchCV(xgb.XGBRegressor(random_state=42), param_grid, cv=5, scoring='r2')",
+        "detail": "project",
+        "documentation": {}
+    },
+    {
+        "label": "X_test",
+        "kind": 5,
+        "importPath": "project",
+        "description": "project",
+        "peekOfCode": "X_test = scaler.transform(X_test)  # transform test data using the same scaler\n# Define parameter grid for hyperparameter tuning\nparam_grid = {\n    'n_estimators': [100, 200, 300],  # number of trees\n    'learning_rate': [0.05, 0.1, 0.2],  # step size shrinkage\n    'max_depth': [3, 4, 5]  # maximum depth of trees\n}\n# Use GridSearchCV to find the best combination of parameters\ngrid_search = GridSearchCV(xgb.XGBRegressor(random_state=42), param_grid, cv=5, scoring='r2')\ngrid_search.fit(X_train, y_train)  # train with cross-validation",
+        "detail": "project",
+        "documentation": {}
+    },
+    {
+        "label": "param_grid",
+        "kind": 5,
+        "importPath": "project",
+        "description": "project",
+        "peekOfCode": "param_grid = {\n    'n_estimators': [100, 200, 300],  # number of trees\n    'learning_rate': [0.05, 0.1, 0.2],  # step size shrinkage\n    'max_depth': [3, 4, 5]  # maximum depth of trees\n}\n# Use GridSearchCV to find the best combination of parameters\ngrid_search = GridSearchCV(xgb.XGBRegressor(random_state=42), param_grid, cv=5, scoring='r2')\ngrid_search.fit(X_train, y_train)  # train with cross-validation\n# Retrieve and print the best hyperparameters found\nbest_params = grid_search.best_params_",
+        "detail": "project",
+        "documentation": {}
+    },
+    {
+        "label": "grid_search",
+        "kind": 5,
+        "importPath": "project",
+        "description": "project",
+        "peekOfCode": "grid_search = GridSearchCV(xgb.XGBRegressor(random_state=42), param_grid, cv=5, scoring='r2')\ngrid_search.fit(X_train, y_train)  # train with cross-validation\n# Retrieve and print the best hyperparameters found\nbest_params = grid_search.best_params_\nprint(\"Best Parameters:\", best_params)\n# Train final model using the best parameters from GridSearch\nmodel = xgb.XGBRegressor(**best_params, random_state=42)\nmodel.fit(X_train, y_train)\n# Make predictions on the test set\ny_pred = model.predict(X_test)",
+        "detail": "project",
+        "documentation": {}
+    },
+    {
+        "label": "best_params",
+        "kind": 5,
+        "importPath": "project",
+        "description": "project",
+        "peekOfCode": "best_params = grid_search.best_params_\nprint(\"Best Parameters:\", best_params)\n# Train final model using the best parameters from GridSearch\nmodel = xgb.XGBRegressor(**best_params, random_state=42)\nmodel.fit(X_train, y_train)\n# Make predictions on the test set\ny_pred = model.predict(X_test)\n# Evaluate the model using common regression metrics\nmse = mean_squared_error(y_test, y_pred)  # mean squared error\nr2 = r2_score(y_test, y_pred)  # R-squared score",
+        "detail": "project",
+        "documentation": {}
+    },
+    {
+        "label": "model",
+        "kind": 5,
+        "importPath": "project",
+        "description": "project",
+        "peekOfCode": "model = xgb.XGBRegressor(**best_params, random_state=42)\nmodel.fit(X_train, y_train)\n# Make predictions on the test set\ny_pred = model.predict(X_test)\n# Evaluate the model using common regression metrics\nmse = mean_squared_error(y_test, y_pred)  # mean squared error\nr2 = r2_score(y_test, y_pred)  # R-squared score\nrmse = np.sqrt(mse)  # root mean squared error\n# Print evaluation results\nprint(f\"\\nFinal RMSE on Test Set: {rmse:.2f}\")",
+        "detail": "project",
+        "documentation": {}
+    },
+    {
+        "label": "y_pred",
+        "kind": 5,
+        "importPath": "project",
+        "description": "project",
+        "peekOfCode": "y_pred = model.predict(X_test)\n# Evaluate the model using common regression metrics\nmse = mean_squared_error(y_test, y_pred)  # mean squared error\nr2 = r2_score(y_test, y_pred)  # R-squared score\nrmse = np.sqrt(mse)  # root mean squared error\n# Print evaluation results\nprint(f\"\\nFinal RMSE on Test Set: {rmse:.2f}\")\nprint(f\"Mean Squared Error: {mse:.4f}\")\nprint(f\"R^2 Score: {r2:.4f}\")\n# # Feature importance visualization (currently commented out)",
+        "detail": "project",
+        "documentation": {}
+    },
+    {
+        "label": "mse",
+        "kind": 5,
+        "importPath": "project",
+        "description": "project",
+        "peekOfCode": "mse = mean_squared_error(y_test, y_pred)  # mean squared error\nr2 = r2_score(y_test, y_pred)  # R-squared score\nrmse = np.sqrt(mse)  # root mean squared error\n# Print evaluation results\nprint(f\"\\nFinal RMSE on Test Set: {rmse:.2f}\")\nprint(f\"Mean Squared Error: {mse:.4f}\")\nprint(f\"R^2 Score: {r2:.4f}\")\n# # Feature importance visualization (currently commented out)\n# feature_importance = model.feature_importances_\n# sorted_idx = np.argsort(feature_importance)[::-1]",
+        "detail": "project",
+        "documentation": {}
+    },
+    {
+        "label": "r2",
+        "kind": 5,
+        "importPath": "project",
+        "description": "project",
+        "peekOfCode": "r2 = r2_score(y_test, y_pred)  # R-squared score\nrmse = np.sqrt(mse)  # root mean squared error\n# Print evaluation results\nprint(f\"\\nFinal RMSE on Test Set: {rmse:.2f}\")\nprint(f\"Mean Squared Error: {mse:.4f}\")\nprint(f\"R^2 Score: {r2:.4f}\")\n# # Feature importance visualization (currently commented out)\n# feature_importance = model.feature_importances_\n# sorted_idx = np.argsort(feature_importance)[::-1]\n# plt.figure(figsize=(10, 6))",
+        "detail": "project",
+        "documentation": {}
+    },
+    {
+        "label": "rmse",
+        "kind": 5,
+        "importPath": "project",
+        "description": "project",
+        "peekOfCode": "rmse = np.sqrt(mse)  # root mean squared error\n# Print evaluation results\nprint(f\"\\nFinal RMSE on Test Set: {rmse:.2f}\")\nprint(f\"Mean Squared Error: {mse:.4f}\")\nprint(f\"R^2 Score: {r2:.4f}\")\n# # Feature importance visualization (currently commented out)\n# feature_importance = model.feature_importances_\n# sorted_idx = np.argsort(feature_importance)[::-1]\n# plt.figure(figsize=(10, 6))\n# plt.barh(np.array(X.columns)[sorted_idx], feature_importance[sorted_idx])",
         "detail": "project",
         "documentation": {}
     },
